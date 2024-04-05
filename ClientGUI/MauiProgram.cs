@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LoggerLibrary;
+using Microsoft.Extensions.Logging;
 
 namespace ClientGUI
 {
@@ -13,10 +14,17 @@ namespace ClientGUI
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .Services.AddLogging(configure =>
+                {
+                    configure.AddDebug();
+                    configure.AddProvider(new CustomFileLoggerProvider());
+                    configure.SetMinimumLevel(LogLevel.Debug);//Set the log level
+                })
+                .AddTransient<MainPage>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

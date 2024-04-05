@@ -62,4 +62,10 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Communications\Communications.csproj" />
+	  <ProjectReference Include="..\Logger\Logger.csproj" />
+	</ItemGroup>
+
+
 </Project>

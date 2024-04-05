@@ -1,25 +1,63 @@
-﻿namespace ClientGUI
+﻿using Microsoft.Extensions.Logging;
+
+namespace ClientGUI
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+        ClientBackEnd backEnd;
+        public readonly ILogger _logger;
+        public readonly Entry nameEntryPtr;
+        public readonly Entry iPAddressEntryPtr;
+        public readonly Entry portEntryPtr;
+        public readonly Button connectButtonPtr;
+        public readonly Label userLoggingLabelPtr;
 
-        public MainPage()
+        public MainPage(ILogger<MainPage> logger)
         {
             InitializeComponent();
+            backEnd = new ClientBackEnd(this);
+            _logger = logger;
+            nameEntryPtr = NameEntry;
+            iPAddressEntryPtr = IPAddressEntry;
+            portEntryPtr = PortEntry;
+            connectButtonPtr = ConnectButton;
+            userLoggingLabelPtr = UserLoggingLabel;
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        /// <summary>
+        /// Called when user clicked connect button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ConnectButton_Clicked(object sender, EventArgs e)
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+            if (!backEnd.isConnectedToServer())
+            {
+                NameEntry.IsReadOnly = false;
+                IPAddressEntry.IsReadOnly = false;
+                ConnectButton.Text = "Connect To Server";
+            }
             else
-                CounterBtn.Text = $"Clicked {count} times";
+            {
+                ConnectButton.Text = "Connecting...";
+                ConnectButton.IsEnabled = false;
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+                if (await backEnd.ConnectToServer())
+                {
+                    await backEnd.StartToHandleIncomingData();
+                }
+                else
+                {
+                    ConnectButton.IsEnabled = true;
+                    ConnectButton.Text = "Connect To Server";
+                    NameEntry.IsReadOnly = false;
+                    IPAddressEntry.IsReadOnly = false;
+                }
+            }
         }
+
+
+
     }
 
 }
