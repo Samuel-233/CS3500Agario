@@ -9,7 +9,7 @@
             <HorizontalStackLayout>
 
                 <!--This part for user to connect to server-->
-                <VerticalStackLayout Spacing="5" WidthRequest="300">
+                <VerticalStackLayout Spacing="5" WidthRequest="300" x:Name="loginStack">
 
                     <HorizontalStackLayout
                      HorizontalOptions="Start">
@@ -84,21 +84,23 @@
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 1-->
-                <VerticalStackLayout Spacing="5" WidthRequest="300">
-
-                    <Label
+                <VerticalStackLayout Spacing="5" WidthRequest="300" HeightRequest="180" VerticalOptions="Start">
+                    <ScrollView WidthRequest="300" HeightRequest="180" VerticalOptions="Start">
+                        <Label
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Text="Welcome to Agrio for CS 3500 All Systems Go!"
                             x:Name="UserLoggingLabel"
                             TextColor="White"
-                            WidthRequest="60"
+                            WidthRequest="300"
                             LineBreakMode="WordWrap"
                             FontSize="20" />
+                    </ScrollView>
+                    
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 2-->
-                <VerticalStackLayout>
+                <VerticalStackLayout Spacing="5" WidthRequest="300" x:Name="gameInfoStack" IsVisible="false">
 
                 </VerticalStackLayout>
 
@@ -111,10 +113,11 @@
             </HorizontalStackLayout>
 
             <GraphicsView 
-                x:Name="PlaySurface"
+                x:Name="playSurface"
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
                 HeightRequest="800"
+                IsVisible="false"
                 WidthRequest="800">
                 <GraphicsView.GestureRecognizers>
                     <PointerGestureRecognizer PointerMoved="PointerChanged"/>

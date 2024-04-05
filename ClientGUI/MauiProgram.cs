@@ -23,6 +23,7 @@ namespace ClientGUI
                 })
                 .AddTransient<MainPage>();
 
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

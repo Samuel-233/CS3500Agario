@@ -1,27 +1,39 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Xml.Serialization;
 
 namespace ClientGUI
 {
     public partial class MainPage : ContentPage
     {
-        ClientBackEnd backEnd;
+        public readonly ClientBackEnd backEnd;
         public readonly ILogger _logger;
         public readonly Entry nameEntryPtr;
         public readonly Entry iPAddressEntryPtr;
         public readonly Entry portEntryPtr;
         public readonly Button connectButtonPtr;
         public readonly Label userLoggingLabelPtr;
+        public readonly VerticalStackLayout gameInfoStackPtr;
+        public readonly VerticalStackLayout loginStackPtr;
+        public readonly GraphicsView playSurfacePtr;
 
+        //TODO Figure out how to do DI for the backEnd
         public MainPage(ILogger<MainPage> logger)
         {
             InitializeComponent();
-            backEnd = new ClientBackEnd(this);
             _logger = logger;
+            backEnd = new ClientBackEnd(this);
             nameEntryPtr = NameEntry;
             iPAddressEntryPtr = IPAddressEntry;
             portEntryPtr = PortEntry;
             connectButtonPtr = ConnectButton;
             userLoggingLabelPtr = UserLoggingLabel;
+            gameInfoStackPtr = gameInfoStack;
+            playSurfacePtr = playSurface;
+            loginStackPtr = loginStack;
+            /*            this.PlaySurface.Drawable = new MyCanvas(boxes,
+                            MoveOnUpdateCheckBox, InvalidateAlwaysCheckBox,
+                            DrawOnMe);*/
+            
         }
 
         /// <summary>
@@ -35,6 +47,8 @@ namespace ClientGUI
             {
                 NameEntry.IsReadOnly = false;
                 IPAddressEntry.IsReadOnly = false;
+                gameInfoStack.IsVisible = false;
+                playSurface.IsVisible = false;
                 ConnectButton.Text = "Connect To Server";
             }
             else
@@ -56,8 +70,19 @@ namespace ClientGUI
             }
         }
 
+        private async void PointerChanged(object  sender, EventArgs e){
 
+        }
 
+        private async void OnTap(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void PanUpdated(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

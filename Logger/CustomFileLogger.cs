@@ -21,7 +21,7 @@ using System.Diagnostics;
 
 namespace LoggerLibrary
 {
-    internal class CustomFileLogger : ILogger
+    public class CustomFileLogger : ILogger
     {
         private string _FileName;
 

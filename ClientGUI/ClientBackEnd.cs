@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ClientGUI
 {
-    internal class ClientBackEnd
+    public class ClientBackEnd
     {
         private INetworking networking;
         private readonly ILogger _logger;
@@ -66,13 +66,15 @@ namespace ClientGUI
             }
             if (string.IsNullOrWhiteSpace(_mainPage.portEntryPtr.Text))
             {
-                _mainPage.iPAddressEntryPtr.Text = "11000";
+                _mainPage.portEntryPtr.Text = "11000";
                 logging.AppendLine("Invalid port, Change to 11000");
             }
 
+            _mainPage.userLoggingLabelPtr.Text = logging.ToString();
+
             try
             {
-                await networking.ConnectAsync(_mainPage.iPAddressEntryPtr.Text, int.Parse(_mainPage.iPAddressEntryPtr.Text));
+                await networking.ConnectAsync(_mainPage.iPAddressEntryPtr.Text, int.Parse(_mainPage.portEntryPtr.Text));
             }
             catch (Exception ex)
             {
@@ -99,12 +101,10 @@ namespace ClientGUI
         /// <param name="channel">networking channel</param>
         private async void Connected(Networking channel)
         {
-        throw new NotImplementedException();
-/*            await networking.SendAsync($"Command Name {nameEntry.Text}");
-            connectBtn.IsEnabled = true;
-            connectBtn.Text = "DisConnect";
-            ipAddressEntry.IsReadOnly = true;
-            UpdateMessageBox("Connected To the Server", 1);*/
+            _mainPage.gameInfoStackPtr.IsVisible = true;
+            _mainPage.playSurfacePtr.IsVisible = true;
+            _mainPage.loginStackPtr.IsVisible = false;
+            ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
         }
 
         /// <summary>
@@ -113,12 +113,12 @@ namespace ClientGUI
         /// <param name="channel">networking channel</param>
         private void Disconnected(Networking channel)
         {
-            throw new NotImplementedException();
-            /*            nameEntry.IsReadOnly = false;
-                        ipAddressEntry.IsReadOnly = false;
-                        networking.Disconnect();
-                        connectBtn.Text = "Connect To Server";
-                        UpdateMessageBox("Disconnected from server", 1);*/
+            _mainPage.gameInfoStackPtr.IsVisible = false;
+            _mainPage.playSurfacePtr.IsVisible = false;
+            _mainPage.loginStackPtr.IsVisible = true;
+            _mainPage.connectButtonPtr.IsEnabled = true;
+            _mainPage.connectButtonPtr.Text = "Connect To Server";
+            ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Disconnected From Server");
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private async void ReceivedMessage(Networking channel, string message)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
             /*            if (message.Contains("Command Participants,") &&
                         message.Substring(0, 21).Equals("Command Participants,"))
                         {
