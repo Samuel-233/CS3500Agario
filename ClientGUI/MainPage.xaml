@@ -116,9 +116,9 @@
                 x:Name="playSurface"
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
-                HeightRequest="800"
+                HeightRequest="650"
                 IsVisible="false"
-                WidthRequest="800">
+                WidthRequest="650">
                 <GraphicsView.GestureRecognizers>
                     <PointerGestureRecognizer PointerMoved="PointerChanged"/>
                     <TapGestureRecognizer Tapped="OnTap"/>

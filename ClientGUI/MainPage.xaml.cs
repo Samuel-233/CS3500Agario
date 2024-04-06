@@ -21,7 +21,6 @@ namespace ClientGUI
         {
             InitializeComponent();
             _logger = logger;
-            backEnd = new ClientBackEnd(this);
             nameEntryPtr = NameEntry;
             iPAddressEntryPtr = IPAddressEntry;
             portEntryPtr = PortEntry;
@@ -30,10 +29,11 @@ namespace ClientGUI
             gameInfoStackPtr = gameInfoStack;
             playSurfacePtr = playSurface;
             loginStackPtr = loginStack;
+            backEnd = new ClientBackEnd(this);
             /*            this.PlaySurface.Drawable = new MyCanvas(boxes,
                             MoveOnUpdateCheckBox, InvalidateAlwaysCheckBox,
                             DrawOnMe);*/
-            
+
         }
 
         /// <summary>

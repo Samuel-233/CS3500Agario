@@ -1,4 +1,5 @@
-﻿using Communications;
+﻿using AgarioModels;
+using Communications;
 using Microsoft.Extensions.Logging;
 using NetworkingLibrary;
 using System.Text;
@@ -10,6 +11,7 @@ namespace ClientGUI
     {
         private INetworking networking;
         private readonly ILogger _logger;
+        private readonly World _world;
         private readonly MainPage _mainPage;
 
         public ClientBackEnd(MainPage mainPage)
@@ -17,6 +19,8 @@ namespace ClientGUI
             _logger = mainPage._logger;
             networking = new Networking(_logger, Connected, Disconnected, ReceivedMessage);
             _mainPage = mainPage;
+            _world = new World(_logger);
+            mainPage.playSurfacePtr.Drawable = new Canvas(_world, mainPage.playSurfacePtr);
         }
 
 
@@ -128,6 +132,7 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private async void ReceivedMessage(Networking channel, string message)
         {
+            _mainPage.playSurfacePtr.Invalidate();
             //throw new NotImplementedException();
             /*            if (message.Contains("Command Participants,") &&
                         message.Substring(0, 21).Equals("Command Participants,"))
