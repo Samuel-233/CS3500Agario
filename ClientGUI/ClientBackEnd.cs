@@ -109,6 +109,7 @@ namespace ClientGUI
             _mainPage.playSurfacePtr.IsVisible = true;
             _mainPage.loginStackPtr.IsVisible = false;
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
+
         }
 
         /// <summary>
@@ -132,22 +133,7 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private async void ReceivedMessage(Networking channel, string message)
         {
-            _mainPage.playSurfacePtr.Invalidate();
-            //throw new NotImplementedException();
-            /*            if (message.Contains("Command Participants,") &&
-                        message.Substring(0, 21).Equals("Command Participants,"))
-                        {
-                            UpdateParticipants(message.Substring(21));
-                            return;
-                        }
-                        if (message.Contains("NAME REJECTED") && message.Length == 13)
-                        {
-                            nameEntry.Text = oldName;
-                            UpdateMessageBox($"Change name request rejected, change back to old name {oldName}", 0);
-                            await networking.SendAsync("Command Name " + oldName);
-                            return;
-                        }
-                        UpdateMessageBox(message, 3);*/
+            //_mainPage.playSurfacePtr.Invalidate();
         }
 
         /// <summary>

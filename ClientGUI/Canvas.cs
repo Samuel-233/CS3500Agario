@@ -1,4 +1,5 @@
 ﻿using AgarioModels;
+using static Android.Icu.Text.CaseMap;
 
 namespace ClientGUI
 {
@@ -11,7 +12,7 @@ namespace ClientGUI
         /// <summary>
         /// Record Cam position
         /// </summary>
-        private System.Numerics.Vector2 camPos = new System.Numerics.Vector2(2500f,2500f);
+        private System.Numerics.Vector2 camPos = new System.Numerics.Vector2(2500f, 2500f);
         /// <summary>
         /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 20/r
         /// </summary>
@@ -23,7 +24,7 @@ namespace ClientGUI
 
         float temp = 1;
 
-        public Canvas(World world, GraphicsView gv) 
+        public Canvas(World world, GraphicsView gv)
         {
             width = (int)gv.WidthRequest;
             height = (int)gv.HeightRequest;
@@ -33,10 +34,11 @@ namespace ClientGUI
             this.gv = gv;
 
 
-            for(int i = 0; i <100; i++){
-                this.world.foods.Add(i,new Food(i, new System.Numerics.Vector2(40 * i + 10*i, 2500), 1, 1256.636f));
+            for (int i = 0; i < 100; i++)
+            {
+                this.world.foods.Add(i, new Food(i, new System.Numerics.Vector2(40 * i + 10 * i, 2500), 1, 1256.636f));
             }
-            this.world.foods.Add(100, new Food(100, new System.Numerics.Vector2(2175,2175), 1, 331000f));
+            this.world.foods.Add(100, new Food(100, new System.Numerics.Vector2(2175, 2175), 1, 331000f));
             this.world.foods.Add(101, new Food(101, new System.Numerics.Vector2(3150, 3150), 1, 1327000f));
         }
 
@@ -58,52 +60,56 @@ namespace ClientGUI
                           out System.Numerics.Vector2 screenPos, out float radius))
                         continue;
 
-                    canvas.FillColor = Color.FromRgba(red, blue, green, alpha);
+                    canvas.FillColor = Color.FromInt(food.Value.ARGBColor);
                     canvas.StrokeColor = Colors.Black;
-                    canvas.DrawCircle(screenPos,radius);
                     canvas.DrawCircle(screenPos, radius);
+                    canvas.FillCircle(screenPos, radius);
                     green += 3;
                     blue += 8;
                     green %= 255;
                     blue %= 255;
                 }
-                temp += 0.01f;
-                zoom = 0.5f;
-                gv.Invalidate();
-                /*                if (invalidateAlwaysCB.IsChecked)
-                                {
-                                    gv.Invalidate();
-                                }
 
-                                if (moveOnInvalidateCB.IsChecked)
-                                {
-                                    foreach (var box in boxes)
-                                    {
-                                        box.X++;
-                                        box.Y++;
-                                    }
-                                }*/
+                lock (world.players)
+                {
+                    foreach (var player in world.players)
+                    {
+                        if (!ConvertFromWorldToScreen(player.Value.pos, player.Value.radius,
+                              out System.Numerics.Vector2 screenPos, out float radius))
+                            continue;
+
+                        canvas.FillColor = Color.FromInt(player.Value.ARGBColor);
+                        canvas.StrokeColor = Colors.Black;
+                        canvas.DrawCircle(screenPos, radius);
+                        canvas.FillCircle(screenPos, radius);
+                        /*                        canvas.FontColor = Colors.White;
+                                                canvas.FontSize = */
+
+                    }
+                    gv.Invalidate();
+
+                }
             }
-        }
 
 
 
 
-        private bool ConvertFromWorldToScreen(
-              in System.Numerics.Vector2 worldPos, in float radiusIn,
-              out System.Numerics.Vector2 screenPos, out float radiusOut)
-        {
-            System.Numerics.Vector2 ptMinusCam = worldPos - camPos;
-            screenPos = new();
-            radiusOut = radiusIn;
-            //if the distance of cam to pt is less than the half diagonal + radius, then we do not draw it.
-            if(System.Numerics.Vector2.Dot(ptMinusCam, ptMinusCam)>Math.Pow(halfdiagonal/zoom+radiusIn,2))return false;
+            bool ConvertFromWorldToScreen(
+                 in System.Numerics.Vector2 worldPos, in float radiusIn,
+                 out System.Numerics.Vector2 screenPos, out float radiusOut)
+            {
+                System.Numerics.Vector2 ptMinusCam = worldPos - camPos;
+                screenPos = new();
+                radiusOut = radiusIn;
+                //if the distance of cam to pt is less than the half diagonal + radius, then we do not draw it.
+                if (System.Numerics.Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / zoom + radiusIn, 2)) return false;
 
-            //Cam pos is at the center of the canvas, so add half of the screen width and height
-            screenPos = new System.Numerics.Vector2(width/zoom/2, height/zoom/2) + ptMinusCam;
-            screenPos *= zoom;
-            radiusOut = radiusIn * zoom;
-            return true;
+                //Cam pos is at the center of the canvas, so add half of the screen width and height
+                screenPos = new System.Numerics.Vector2(width / zoom / 2, height / zoom / 2) + ptMinusCam;
+                screenPos *= zoom;
+                radiusOut = radiusIn * zoom;
+                return true;
+            }
         }
     }
 }
