@@ -50,7 +50,7 @@ namespace ClientGUI
             this.world.foods.Add(100, new Food(100, new System.Numerics.Vector2(2175, 2175), 1, 331000f));
             this.world.foods.Add(101, new Food(101, new System.Numerics.Vector2(3150, 3150), 1, 1327000f));*/
         }
-
+        //TODO Make camera cannot see out side the border
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             camPos = world.players[world.playerID].pos;

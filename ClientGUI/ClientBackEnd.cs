@@ -172,6 +172,19 @@ namespace ClientGUI
             }
         }
 
+        async public Task Split()
+        {
+            Point? relPos = await GetUserPointerPos();
+            Vector2 playerPos = _world.players[_world.playerID].pos;
+
+            string command = String.Format(Protocols.CMD_Split,
+                                            (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
+                                            (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
+
+            _logger.LogInformation(command);
+            await networking.SendAsync(command);
+        }
+
         public void UpdateUserPointer(object sender, PointerEventArgs e)
         {
             if(this.sender == null)this.sender = sender;
@@ -185,6 +198,8 @@ namespace ClientGUI
                 }
             }
         }
+
+
 
         async public Task<Point?> GetUserPointerPos(){
             return await MainThread.InvokeOnMainThreadAsync(() =>

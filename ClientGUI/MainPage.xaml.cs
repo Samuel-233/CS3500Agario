@@ -74,14 +74,14 @@ namespace ClientGUI
             }
         }
 
-        private async void PointerMoved(object sender, PointerEventArgs e)
+        private void PointerMoved(object sender, PointerEventArgs e)
         {
             backEnd.UpdateUserPointer(sender,e);
         }
 
         private async void PointerPressed(object sender, PointerEventArgs e)
         {
-            
+            await backEnd.Split();
         }
 
         async void PointerEntered(object sender, PointerEventArgs e)
