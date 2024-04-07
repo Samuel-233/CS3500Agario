@@ -1,5 +1,4 @@
 ﻿using AgarioModels;
-using static Android.Icu.Text.CaseMap;
 
 namespace ClientGUI
 {
@@ -33,21 +32,20 @@ namespace ClientGUI
             halfdiagonal *= width;
             this.gv = gv;
 
-
+            /*
+            //TODO Remove this debug
             for (int i = 0; i < 100; i++)
             {
                 this.world.foods.Add(i, new Food(i, new System.Numerics.Vector2(40 * i + 10 * i, 2500), 1, 1256.636f));
             }
             this.world.foods.Add(100, new Food(100, new System.Numerics.Vector2(2175, 2175), 1, 331000f));
-            this.world.foods.Add(101, new Food(101, new System.Numerics.Vector2(3150, 3150), 1, 1327000f));
+            this.world.foods.Add(101, new Food(101, new System.Numerics.Vector2(3150, 3150), 1, 1327000f));*/
         }
 
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
-            int alpha = 255;
-            int red = 255;
-            int green = 0;
-            int blue = 0;
+            camPos = world.players[world.playerID].pos;
+            zoom = 20.0f / world.players[world.playerID].radius;
 
             canvas.FillColor = Colors.LightBlue;
             canvas.FillRectangle(0, 0, width, height);
@@ -64,10 +62,6 @@ namespace ClientGUI
                     canvas.StrokeColor = Colors.Black;
                     canvas.DrawCircle(screenPos, radius);
                     canvas.FillCircle(screenPos, radius);
-                    green += 3;
-                    blue += 8;
-                    green %= 255;
-                    blue %= 255;
                 }
 
                 lock (world.players)

@@ -3,6 +3,7 @@ using Communications;
 using Microsoft.Extensions.Logging;
 using NetworkingLibrary;
 using System.Text;
+using System.Text.RegularExpressions;
 
 
 namespace ClientGUI
@@ -101,6 +102,7 @@ namespace ClientGUI
 
         /// <summary>
         /// A delegate feed to the networking, called when connected to server
+        /// When First client connect to server, we need to send a protocols to server so it knows we start the phase one
         /// </summary>
         /// <param name="channel">networking channel</param>
         private async void Connected(Networking channel)
@@ -109,7 +111,7 @@ namespace ClientGUI
             _mainPage.playSurfacePtr.IsVisible = true;
             _mainPage.loginStackPtr.IsVisible = false;
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
-
+            await networking.SendAsync(String.Format(Protocols.CMD_Start_Game, _mainPage.nameEntryPtr.Text));
         }
 
         /// <summary>
@@ -133,9 +135,73 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private async void ReceivedMessage(Networking channel, string message)
         {
-            //_mainPage.playSurfacePtr.Invalidate();
+            CheckMessage(message);
+            _mainPage.playSurfacePtr.Invalidate();
         }
 
+        /// <summary>
+        /// Check the message that send from server, and update the data.
+        /// </summary>
+        /// <param name="message"></param>
+        private void CheckMessage(string message)
+        {
+            Match match;
+
+
+
+            //Eaten Food
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_Eaten_Food));
+            if (match.Success)
+            {
+                _world.RemoveFood(match.Groups[1].Value);
+                return;
+            }
+
+            //Eaten Player
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_Dead_Players));
+            if (match.Success)
+            {
+                _world.RemovePlayer(match.Groups[1].Value);
+                return;
+            }
+
+            //Update Player
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_Update_Players));
+            if (match.Success)
+            {
+                _world.UpdatePlayer(match.Groups[1].Value);
+                return;
+            }
+
+            //HeartBeat
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_HeartBeat));
+            if (match.Success)
+            {
+                _world.heartBeat = match.Groups[1].Value;
+                return;
+            }
+
+            //Get Player ID
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_Player_Object));
+            if (match.Success)
+            {
+                _world.playerID = int.Parse(match.Groups[1].Value);
+                return;
+            }
+
+            //Initialize Food
+            match = Regex.Match(message, GeneratePattern(Protocols.CMD_Food));
+            if (match.Success)
+            {
+                _world.InitializeFood(match.Groups[1].Value);
+                return;
+            }
+
+        }
+
+        private string GeneratePattern(string protocol){
+            return protocol+@"(.+)";
+        }
         /// <summary>
         /// Make the func execute on Main thread
         /// </summary>
