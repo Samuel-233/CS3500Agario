@@ -158,14 +158,15 @@ namespace ClientGUI
                 catch (OperationCanceledException) { return; }
 
                 Point? relPos = await GetUserPointerPos();
-                /*
-                                string command = String.Format(Protocols.CMD_Move,
-                                                                relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2,
-                                                                relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2);*/
+                Vector2 playerPos = _world.players[_world.playerID].pos;
 
                 string command = String.Format(Protocols.CMD_Move,
+                                                (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
+                                                (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
+
+/*                string command = String.Format(Protocols.CMD_Move,
                                                 relPos.Value.X ,
-                                                relPos.Value.Y );
+                                                relPos.Value.Y );*/
                 _logger.LogInformation(command);
                 await networking.SendAsync(command);
             }
