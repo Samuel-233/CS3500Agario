@@ -75,7 +75,7 @@ namespace AgarioModels
             {
                 foreach (Player player in players)
                 {
-                    this.players[player.ID]=player;
+                    this.players[player.ID] = player;
                 }
             }
         }

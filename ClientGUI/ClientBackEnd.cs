@@ -2,6 +2,7 @@
 using Communications;
 using Microsoft.Extensions.Logging;
 using NetworkingLibrary;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -14,6 +15,11 @@ namespace ClientGUI
         private readonly ILogger _logger;
         private readonly World _world;
         private readonly MainPage _mainPage;
+        /// <summary>
+        /// Track the mouse position
+        /// </summary>
+        object sender;
+        PointerEventArgs e;
 
         public ClientBackEnd(MainPage mainPage)
         {
@@ -137,7 +143,60 @@ namespace ClientGUI
         {
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
-            await networking.SendAsync(@"{{move,{100},{500}}}");
+            //await networking.SendAsync(@"{{move,{100},{500}}}");
+        }
+
+        public async Task Move(object sender, PointerEventArgs e, CancellationToken cancellationToken)
+        {
+            UpdateUserPointer(sender, e);
+            while (true)
+            {
+                try
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+                catch (OperationCanceledException) { return; }
+
+                Point? relPos = await GetUserPointerPos();
+                /*
+                                string command = String.Format(Protocols.CMD_Move,
+                                                                relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2,
+                                                                relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2);*/
+
+                string command = String.Format(Protocols.CMD_Move,
+                                                relPos.Value.X ,
+                                                relPos.Value.Y );
+                _logger.LogInformation(command);
+                await networking.SendAsync(command);
+            }
+        }
+
+        public void UpdateUserPointer(object sender, PointerEventArgs e)
+        {
+            if(this.sender == null)this.sender = sender;
+            if (this.e == null) this.e = e;
+            lock (this.sender)
+            {
+                lock (this.e)
+                {
+                    this.sender= sender;
+                    this.e= e;
+                }
+            }
+        }
+
+        async public Task<Point?> GetUserPointerPos(){
+            return await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                lock (this.sender)
+                {
+                    lock (this.e)
+                    {
+                        return this.e.GetPosition((View)this.sender);
+                    }
+                }
+
+            });
         }
 
         /// <summary>

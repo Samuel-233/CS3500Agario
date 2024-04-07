@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Xml.Serialization;
+﻿
+using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace ClientGUI
 {
@@ -16,6 +17,8 @@ namespace ClientGUI
         public readonly VerticalStackLayout loginStackPtr;
         public readonly GraphicsView playSurfacePtr;
 
+        CancellationTokenSource continusMove;
+
         //TODO Figure out how to do DI for the backEnd
         public MainPage(ILogger<MainPage> logger)
         {
@@ -30,6 +33,7 @@ namespace ClientGUI
             playSurfacePtr = playSurface;
             loginStackPtr = loginStack;
             backEnd = new ClientBackEnd(this);
+            continusMove = new CancellationTokenSource();
             /*            this.PlaySurface.Drawable = new MyCanvas(boxes,
                             MoveOnUpdateCheckBox, InvalidateAlwaysCheckBox,
                             DrawOnMe);*/
@@ -70,9 +74,34 @@ namespace ClientGUI
             }
         }
 
-        private async void PointerChanged(object  sender, EventArgs e){
-
+        private async void PointerMoved(object sender, PointerEventArgs e)
+        {
+            backEnd.UpdateUserPointer(sender,e);
         }
+
+        private async void PointerPressed(object sender, PointerEventArgs e)
+        {
+            
+        }
+
+        async void PointerEntered(object sender, PointerEventArgs e)
+        {
+            Point? relativeToContainerPosition = e.GetPosition((View)sender);
+            if (relativeToContainerPosition == null) return;
+            Task t = new Task(async () =>
+            {
+                await backEnd.Move(sender, e, continusMove.Token);
+                continusMove = new();
+            });
+            t.Start();
+            await t;
+        }
+
+        void PointerExited(object sender, PointerEventArgs e)
+        {
+            continusMove.Cancel();
+        }
+
 
         private async void OnTap(object sender, EventArgs e)
         {
@@ -83,6 +112,7 @@ namespace ClientGUI
         {
 
         }
+
     }
 
 }

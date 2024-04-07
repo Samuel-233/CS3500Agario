@@ -510,7 +510,7 @@ namespace NetworkingLibrary
             else
             {
                 _logger.LogTrace($"{clientOrServer}After Message: {data.Length} bytes unprocessed.");
-                _logger.LogInformation($"{clientOrServer}Received Message.");
+                //_logger.LogInformation($"{clientOrServer}Received Message.");
             }
             return foundOneMessage;
         }
