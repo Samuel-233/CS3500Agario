@@ -44,18 +44,25 @@ namespace AgarioModels
         {
             List<int> foodIdToRemove = new();
             DeserializeJSON(ref foodIdToRemove, JSON);
-            foreach(int id in foodIdToRemove){
-                foods.Remove(id);
+            lock(this.foods){
+                foreach (int id in foodIdToRemove)
+                {
+                    foods.Remove(id);
+                }
             }
+
         }
 
+        //TODO show game over when remove self
         public void RemovePlayer(string JSON)
         {
             List<int> playerIdToRemove = new();
             DeserializeJSON(ref playerIdToRemove, JSON);
-            foreach (int id in playerIdToRemove)
-            {
-                foods.Remove(id);
+            lock(this.players){
+                foreach (int id in playerIdToRemove)
+                {
+                    players.Remove(id);
+                }
             }
         }
 

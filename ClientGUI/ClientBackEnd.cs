@@ -137,6 +137,7 @@ namespace ClientGUI
         {
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
+            await networking.SendAsync(@"{{move,{100},{500}}}");
         }
 
         /// <summary>

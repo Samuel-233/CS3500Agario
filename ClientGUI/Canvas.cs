@@ -45,7 +45,7 @@ namespace ClientGUI
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             camPos = world.players[world.playerID].pos;
-            zoom = 20.0f / world.players[world.playerID].radius;
+            zoom = 10f / world.players[world.playerID].radius;
 
             canvas.FillColor = Colors.LightBlue;
             canvas.FillRectangle(0, 0, width, height);
