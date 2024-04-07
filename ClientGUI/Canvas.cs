@@ -13,9 +13,17 @@ namespace ClientGUI
         /// </summary>
         private System.Numerics.Vector2 camPos = new System.Numerics.Vector2(2500f, 2500f);
         /// <summary>
-        /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 20/r
+        /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 10/r
         /// </summary>
-        float zoom = 1;
+        float targetZoom = 1;
+
+        float currentZoom = 0;
+
+        /// <summary>
+        /// Maximum zoom 
+        /// </summary>
+        readonly float maxZoom;
+
         /// <summary>
         /// The length of a canvas diagonal divided by two. 
         /// </summary>
@@ -32,6 +40,7 @@ namespace ClientGUI
             halfdiagonal *= width;
             this.gv = gv;
 
+            maxZoom = (float)gv.WidthRequest / 5000f;
             /*
             //TODO Remove this debug
             for (int i = 0; i < 100; i++)
@@ -45,7 +54,9 @@ namespace ClientGUI
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
             camPos = world.players[world.playerID].pos;
-            zoom = 10f / world.players[world.playerID].radius;
+            
+            targetZoom = Math.Max(10f / world.players[world.playerID].radius, maxZoom);
+            currentZoom += 0.1f * (targetZoom - currentZoom);
 
             canvas.FillColor = Colors.LightBlue;
             canvas.FillRectangle(0, 0, width, height);
@@ -85,7 +96,7 @@ namespace ClientGUI
                 }
             }
 
-
+            
 
 
             bool ConvertFromWorldToScreen(
@@ -96,12 +107,12 @@ namespace ClientGUI
                 screenPos = new();
                 radiusOut = radiusIn;
                 //if the distance of cam to pt is less than the half diagonal + radius, then we do not draw it.
-                if (System.Numerics.Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / zoom + radiusIn, 2)) return false;
+                if (System.Numerics.Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / currentZoom + radiusIn, 2)) return false;
 
                 //Cam pos is at the center of the canvas, so add half of the screen width and height
-                screenPos = new System.Numerics.Vector2(width / zoom / 2, height / zoom / 2) + ptMinusCam;
-                screenPos *= zoom;
-                radiusOut = radiusIn * zoom;
+                screenPos = new System.Numerics.Vector2(width / currentZoom / 2, height / currentZoom / 2) + ptMinusCam;
+                screenPos *= currentZoom;
+                radiusOut = radiusIn * currentZoom;
                 return true;
             }
         }
