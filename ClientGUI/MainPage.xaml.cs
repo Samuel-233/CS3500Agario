@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Logging;
+using NetworkingLibrary;
 using System.Threading;
 
 namespace ClientGUI
@@ -81,6 +82,11 @@ namespace ClientGUI
 
         private async void PointerPressed(object sender, PointerEventArgs e)
         {
+            if (backEnd._world.playerDead)
+            {
+                backEnd._world.playerDead = false;
+                await backEnd.SendStartGameCommand();
+            }
             await backEnd.Split();
         }
 

@@ -55,7 +55,7 @@ namespace AgarioModels
         }
 
         //TODO show game over when remove self
-        public bool RemovePlayer(string JSON)
+        public void RemovePlayer(string JSON)
         {
             List<int> playerIdToRemove = new();
             DeserializeJSON(ref playerIdToRemove, JSON);
@@ -64,12 +64,11 @@ namespace AgarioModels
                 {
                     if (playerID == id) {
                         playerDead = true;
-                        return true;
+                        return;
                     } 
                     players.Remove(id);
                 }
             }
-            return false;
         }
 
         public void UpdatePlayer(string JSON)

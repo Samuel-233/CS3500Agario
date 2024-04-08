@@ -13,9 +13,8 @@ namespace ClientGUI
     {
         private INetworking networking;
         private readonly ILogger _logger;
-        private readonly World _world;
+        public readonly World _world;
         private readonly MainPage _mainPage;
-        private bool gameOver = true;
         /// <summary>
         /// Track the mouse position
         /// </summary>
@@ -118,8 +117,14 @@ namespace ClientGUI
             _mainPage.playSurfacePtr.IsVisible = true;
             _mainPage.loginStackPtr.IsVisible = false;
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
-            await networking.SendAsync(String.Format(Protocols.CMD_Start_Game, _mainPage.nameEntryPtr.Text));
-            gameOver = false;
+            await SendStartGameCommand();
+            _world.playerDead = false;
+
+        }
+
+        public async Task SendStartGameCommand()
+        {
+            await networking.SendAsync(string.Format(Protocols.CMD_Start_Game, _mainPage.nameEntryPtr.Text));
         }
 
         /// <summary>
@@ -143,7 +148,7 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private void ReceivedMessage(Networking channel, string message)
         {
-            if (gameOver) return;
+            if(_world.playerDead) return;
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
             //await networking.SendAsync(@"{{move,{100},{500}}}");
@@ -238,7 +243,7 @@ namespace ClientGUI
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_Dead_Players));
             if (match.Success)
             {
-                gameOver = _world.RemovePlayer(match.Groups[1].Value);
+                _world.RemovePlayer(match.Groups[1].Value);
                 return;
             }
 

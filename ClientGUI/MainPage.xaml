@@ -6,7 +6,7 @@
     <ScrollView>
         <VerticalStackLayout>
 
-            <HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="5">
 
                 <!--This part for user to connect to server-->
                 <VerticalStackLayout Spacing="5" WidthRequest="375" x:Name="loginStack">
