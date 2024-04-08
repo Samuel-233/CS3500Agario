@@ -15,6 +15,7 @@ namespace ClientGUI
         private readonly ILogger _logger;
         private readonly World _world;
         private readonly MainPage _mainPage;
+        private bool gameOver = true;
         /// <summary>
         /// Track the mouse position
         /// </summary>
@@ -118,6 +119,7 @@ namespace ClientGUI
             _mainPage.loginStackPtr.IsVisible = false;
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
             await networking.SendAsync(String.Format(Protocols.CMD_Start_Game, _mainPage.nameEntryPtr.Text));
+            gameOver = false;
         }
 
         /// <summary>

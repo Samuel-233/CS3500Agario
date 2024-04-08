@@ -53,7 +53,12 @@ namespace ClientGUI
         //TODO Make camera cannot see out side the border
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
-            camPos = world.players[world.playerID].pos;
+            try{
+                camPos = world.players[world.playerID].pos;
+            }catch(Exception e){
+                return;
+            }
+            
             
             targetZoom = Math.Max(10f / world.players[world.playerID].radius, maxZoom);
             currentZoom += 0.1f * (targetZoom - currentZoom);
