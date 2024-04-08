@@ -156,7 +156,7 @@ namespace ClientGUI
 
         public async Task Move(object sender, PointerEventArgs e, CancellationToken cancellationToken)
         {
-            //UpdateUserPointer(sender, e);
+            UpdateUserPointer(sender, e);
             try
             {
                 while (true)
@@ -166,11 +166,11 @@ namespace ClientGUI
 
 
                     Point? relPos = await GetUserPointerPos();
-                    Vector2 playerPos = _world.players[_world.playerID].pos;
+                    Vector2 camPos = _world.players[_world.playerID].pos;
 
                     string command = String.Format(Protocols.CMD_Move,
-                                                    (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
-                                                    (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
+                                                    (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + camPos.X),
+                                                    (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + camPos.Y));
 
                     /*                string command = String.Format(Protocols.CMD_Move,
                                                                     relPos.Value.X ,

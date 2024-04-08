@@ -1,5 +1,6 @@
 ﻿using AgarioModels;
 using Microsoft.Maui.Graphics.Text;
+using System.Numerics;
 using Font = Microsoft.Maui.Graphics.Font;
 
 namespace ClientGUI
@@ -14,7 +15,7 @@ namespace ClientGUI
         /// <summary>
         /// Record Cam position
         /// </summary>
-        private System.Numerics.Vector2 camPos = new System.Numerics.Vector2(2500f, 2500f);
+        public Vector2 camPos { get; set; } = new System.Numerics.Vector2(2500f, 2500f) ;
         /// <summary>
         /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 10/r
         /// </summary>
@@ -74,14 +75,22 @@ namespace ClientGUI
 
             try
             {
-                camPos = world.players[world.playerID].pos;
+                targetZoom = Math.Max(10f / world.players[world.playerID].radius, maxZoom);
+                currentZoom += 0.1f * (targetZoom - currentZoom);
             }
             catch (Exception e)
             {
                 return;
             }
-            targetZoom = Math.Max(10f / world.players[world.playerID].radius, maxZoom);
-            currentZoom += 0.1f * (targetZoom - currentZoom);
+            camPos = world.players[world.playerID].pos;
+            //TODO Limit the player cannot see outside the border
+            float halfCamSizeAfterZoom = width / currentZoom / 2;
+            Vector2 topLeft = camPos - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
+            topLeft.X = Math.Max(0,topLeft.X);
+            topLeft = Vector2.Max(new Vector2(0, 0),topLeft);
+            topLeft = Vector2.Min(new Vector2(5000, 5000) - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom)*2, topLeft);
+            camPos = topLeft + new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
+
 
             canvas.FillColor = Colors.LightBlue;
             canvas.FillRectangle(0, 0, width, height);
@@ -91,6 +100,7 @@ namespace ClientGUI
 
             void DrawPlayers(ICanvas canvas)
             {
+                canvas.FontColor = Colors.Black;
                 canvas.Font = Font.Default;
                 lock (world.players)
                 {
@@ -129,6 +139,9 @@ namespace ClientGUI
             }
         }
 
+        public Vector2 GetCamPos(){
+
+        }
 
 
         private bool ConvertFromWorldToScreen(
