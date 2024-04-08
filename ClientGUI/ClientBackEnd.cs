@@ -175,7 +175,7 @@ namespace ClientGUI
 /*                string command = String.Format(Protocols.CMD_Move,
                                                 relPos.Value.X ,
                                                 relPos.Value.Y );*/
-                _logger.LogInformation(command);
+                _logger.LogTrace(command);
                 await networking.SendAsync(command);
             }
         }
@@ -189,7 +189,7 @@ namespace ClientGUI
                                             (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
                                             (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
 
-            _logger.LogInformation(command);
+            _logger.LogTrace(command);
             await networking.SendAsync(command);
         }
 
