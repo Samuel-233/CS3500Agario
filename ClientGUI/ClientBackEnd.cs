@@ -156,29 +156,31 @@ namespace ClientGUI
 
         public async Task Move(object sender, PointerEventArgs e, CancellationToken cancellationToken)
         {
-            UpdateUserPointer(sender, e);
-            while (true)
+            //UpdateUserPointer(sender, e);
+            try
             {
-                try
+                while (true)
                 {
+
                     cancellationToken.ThrowIfCancellationRequested();
 
 
-                Point? relPos = await GetUserPointerPos();
-                Vector2 playerPos = _world.players[_world.playerID].pos;
+                    Point? relPos = await GetUserPointerPos();
+                    Vector2 playerPos = _world.players[_world.playerID].pos;
 
-                string command = String.Format(Protocols.CMD_Move,
-                                                (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
-                                                (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
+                    string command = String.Format(Protocols.CMD_Move,
+                                                    (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + playerPos.X),
+                                                    (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + playerPos.Y));
 
-/*                string command = String.Format(Protocols.CMD_Move,
-                                                relPos.Value.X ,
-                                                relPos.Value.Y );*/
-                _logger.LogTrace(command);
-                await networking.SendAsync(command);
+                    /*                string command = String.Format(Protocols.CMD_Move,
+                                                                    relPos.Value.X ,
+                                                                    relPos.Value.Y );*/
+                    _logger.LogTrace(command);
+                    await networking.SendAsync(command);
+
                 }
-                catch (Exception ex) { return; }
             }
+            catch (Exception ex) { return; }
         }
 
         async public Task Split()

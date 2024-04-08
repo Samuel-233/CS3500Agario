@@ -87,21 +87,25 @@ namespace ClientGUI
                 _logger.LogInformation("Restarted Game");
                 backEnd._world.playerDead = false;
                 await backEnd.SendStartGameCommand();
+                continusMove = new();
+                return;
             }
             await backEnd.Split();
         }
 
         async void PointerEntered(object sender, PointerEventArgs e)
         {
+            if (backEnd._world.playerDead) return;
+            continusMove = new();
             Point? relativeToContainerPosition = e.GetPosition((View)sender);
             if (relativeToContainerPosition == null) return;
             Task t = new Task(async () =>
             {
                 await backEnd.Move(sender, e, continusMove.Token);
-                continusMove = new();
             });
             t.Start();
             await t;
+            
         }
 
         void PointerExited(object sender, PointerEventArgs e)
