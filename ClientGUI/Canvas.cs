@@ -9,7 +9,8 @@ namespace ClientGUI
         World world;
         private readonly int width = 650;
         private readonly int height = 650;
-        private readonly GraphicsView gv;
+        //private readonly GraphicsView gv;
+
         /// <summary>
         /// Record Cam position
         /// </summary>
@@ -40,7 +41,7 @@ namespace ClientGUI
 
             this.world = world;
             halfdiagonal *= width;
-            this.gv = gv;
+            //this.gv = gv;
 
             maxZoom = (float)gv.WidthRequest / 5000f;
             /*

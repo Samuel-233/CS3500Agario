@@ -75,7 +75,7 @@ namespace AgarioModels
             List<Player>? players = new();
             DeserializeJSON(ref players, JSON);
 
-            lock (this.foods)
+            lock (this.players)
             {
                 foreach (Player player in players)
                 {

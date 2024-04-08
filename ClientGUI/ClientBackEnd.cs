@@ -151,7 +151,7 @@ namespace ClientGUI
             if(_world.playerDead) return;
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
-            //await networking.SendAsync(@"{{move,{100},{500}}}");
+
         }
 
         public async Task Move(object sender, PointerEventArgs e, CancellationToken cancellationToken)
@@ -162,8 +162,7 @@ namespace ClientGUI
                 try
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                }
-                catch (OperationCanceledException) { return; }
+
 
                 Point? relPos = await GetUserPointerPos();
                 Vector2 playerPos = _world.players[_world.playerID].pos;
@@ -177,6 +176,8 @@ namespace ClientGUI
                                                 relPos.Value.Y );*/
                 _logger.LogTrace(command);
                 await networking.SendAsync(command);
+                }
+                catch (Exception ex) { return; }
             }
         }
 
