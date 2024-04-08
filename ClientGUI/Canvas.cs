@@ -64,7 +64,7 @@ namespace ClientGUI
                 canvas.Font = Font.DefaultBold;
                 canvas.DrawString("Game Over!", 0, 60, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
 
-                canvas.FontSize = 36;
+                canvas.FontSize = 18;
                 canvas.Font = Font.Default;
                 canvas.DrawString("Left Click to restart", 0, 400, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
                 return;
@@ -88,46 +88,47 @@ namespace ClientGUI
             DrawFoods(canvas);
             DrawPlayers(canvas);
 
-        }
-
-        private void DrawPlayers(ICanvas canvas)
-        {
-            lock (world.players)
+            void DrawPlayers(ICanvas canvas)
             {
-                foreach (var player in world.players)
+                canvas.Font = Font.Default;
+                lock (world.players)
                 {
-                    if (!ConvertFromWorldToScreen(player.Value.pos, player.Value.radius,
-                          out System.Numerics.Vector2 screenPos, out float radius))
-                        continue;
-                    canvas.FillColor = Color.FromInt(player.Value.ARGBColor);
-                    canvas.StrokeColor = Colors.Black;
-                    canvas.DrawCircle(screenPos, radius);
-                    canvas.FillCircle(screenPos, radius);
-                    /*                        canvas.FontColor = Colors.White;
-                                            canvas.FontSize = */
+                    foreach (var player in world.players)
+                    {
+                        if (!ConvertFromWorldToScreen(player.Value.pos, player.Value.radius,
+                              out System.Numerics.Vector2 screenPos, out float radius))
+                            continue;
+                        canvas.FillColor = Color.FromInt(player.Value.ARGBColor);
+                        canvas.StrokeColor = Colors.Black;
+                        canvas.DrawCircle(screenPos, radius);
+                        canvas.FillCircle(screenPos, radius);
 
+                        canvas.FontSize = radius;
+                        canvas.DrawString(player.Value.Name, screenPos.X, screenPos.Y, width, height, HorizontalAlignment.Left, VerticalAlignment.Top);
+                    }
+                }
+            }
+            void DrawFoods(ICanvas canvas)
+            {
+                //Draw players
+                lock (world.foods)
+                {
+                    foreach (var food in world.foods)
+                    {
+                        if (!ConvertFromWorldToScreen(food.Value.pos, food.Value.radius,
+                              out System.Numerics.Vector2 screenPos, out float radius))
+                            continue;
+
+                        canvas.FillColor = Color.FromInt(food.Value.ARGBColor);
+                        canvas.StrokeColor = Colors.Black;
+                        canvas.DrawCircle(screenPos, radius);
+                        canvas.FillCircle(screenPos, radius);
+                    }
                 }
             }
         }
 
-        private void DrawFoods(ICanvas canvas)
-        {
-            //Draw players
-            lock (world.foods)
-            {
-                foreach (var food in world.foods)
-                {
-                    if (!ConvertFromWorldToScreen(food.Value.pos, food.Value.radius,
-                          out System.Numerics.Vector2 screenPos, out float radius))
-                        continue;
 
-                    canvas.FillColor = Color.FromInt(food.Value.ARGBColor);
-                    canvas.StrokeColor = Colors.Black;
-                    canvas.DrawCircle(screenPos, radius);
-                    canvas.FillCircle(screenPos, radius);
-                }
-            }
-        }
 
         private bool ConvertFromWorldToScreen(
                                      in System.Numerics.Vector2 worldPos, in float radiusIn,

@@ -64,7 +64,6 @@ namespace AgarioModels
                 {
                     if (playerID == id) {
                         playerDead = true;
-                        return;
                     } 
                     players.Remove(id);
                 }

@@ -84,6 +84,7 @@ namespace ClientGUI
         {
             if (backEnd._world.playerDead)
             {
+                _logger.LogInformation("Restarted Game");
                 backEnd._world.playerDead = false;
                 await backEnd.SendStartGameCommand();
             }
