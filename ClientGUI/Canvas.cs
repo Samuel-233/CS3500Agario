@@ -19,6 +19,8 @@ namespace ClientGUI
 
         float currentZoom = 0;
 
+        
+
         /// <summary>
         /// Maximum zoom 
         /// </summary>
@@ -28,8 +30,6 @@ namespace ClientGUI
         /// The length of a canvas diagonal divided by two. 
         /// </summary>
         float halfdiagonal = ((float)Math.Sqrt(2)) / 2.0f;
-
-        float temp = 1;
 
         public Canvas(World world, GraphicsView gv)
         {
@@ -53,6 +53,14 @@ namespace ClientGUI
         //TODO Make camera cannot see out side the border
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
+            if(world.playerDead) {
+            //T
+                canvas.FillColor = Color.FromRgba("00000033");
+                canvas.FillRectangle(0, 0, width, height);
+                return;
+            }
+
+
             try{
                 camPos = world.players[world.playerID].pos;
             }catch(Exception e){

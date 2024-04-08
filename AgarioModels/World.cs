@@ -15,6 +15,7 @@ namespace AgarioModels
         public Dictionary<int, Food> foods { get; set; }
         public int playerID { get; set; }
         public string heartBeat { get; set; }
+        public bool playerDead { get; set; }
         private ILogger logger;
         
 
@@ -54,16 +55,21 @@ namespace AgarioModels
         }
 
         //TODO show game over when remove self
-        public void RemovePlayer(string JSON)
+        public bool RemovePlayer(string JSON)
         {
             List<int> playerIdToRemove = new();
             DeserializeJSON(ref playerIdToRemove, JSON);
             lock(this.players){
                 foreach (int id in playerIdToRemove)
                 {
+                    if (playerID == id) {
+                        playerDead = true;
+                        return true;
+                    } 
                     players.Remove(id);
                 }
             }
+            return false;
         }
 
         public void UpdatePlayer(string JSON)

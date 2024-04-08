@@ -9,7 +9,7 @@
             <HorizontalStackLayout>
 
                 <!--This part for user to connect to server-->
-                <VerticalStackLayout Spacing="5" WidthRequest="300" x:Name="loginStack">
+                <VerticalStackLayout Spacing="5" WidthRequest="375" x:Name="loginStack">
 
                     <HorizontalStackLayout
                      HorizontalOptions="Start">
@@ -47,7 +47,7 @@
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout
-                    HorizontalOptions="Center">
+                    HorizontalOptions="Start">
                         <Label
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
@@ -84,7 +84,7 @@
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 1-->
-                <VerticalStackLayout Spacing="5" WidthRequest="300" HeightRequest="180" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="5" WidthRequest="375" HeightRequest="180" VerticalOptions="Start">
                     <ScrollView WidthRequest="300" HeightRequest="180" VerticalOptions="Start">
                         <Label
                             HorizontalOptions="Center"
@@ -100,7 +100,7 @@
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 2-->
-                <VerticalStackLayout Spacing="5" WidthRequest="300" x:Name="gameInfoStack" IsVisible="false">
+                <VerticalStackLayout Spacing="5" WidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
 
                 </VerticalStackLayout>
 
@@ -116,9 +116,9 @@
                 x:Name="playSurface"
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
-                HeightRequest="650"
+                HeightRequest="750"
                 IsVisible="false"
-                WidthRequest="650">
+                WidthRequest="750">
                 <GraphicsView.GestureRecognizers>
                     <PointerGestureRecognizer PointerEntered="PointerEntered" PointerExited="PointerExited" PointerPressed="PointerPressed" PointerMoved="PointerMoved" />
                     <TapGestureRecognizer Tapped="OnTap"/>

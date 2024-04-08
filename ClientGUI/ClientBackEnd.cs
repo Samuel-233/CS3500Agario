@@ -141,8 +141,9 @@ namespace ClientGUI
         /// </summary>
         /// <param name="channel">networking channel</param>
         /// <param name="message">message</param>
-        private async void ReceivedMessage(Networking channel, string message)
+        private void ReceivedMessage(Networking channel, string message)
         {
+            if (gameOver) return;
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
             //await networking.SendAsync(@"{{move,{100},{500}}}");
@@ -225,8 +226,6 @@ namespace ClientGUI
         {
             Match match;
 
-
-
             //Eaten Food
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_Eaten_Food));
             if (match.Success)
@@ -239,7 +238,7 @@ namespace ClientGUI
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_Dead_Players));
             if (match.Success)
             {
-                _world.RemovePlayer(match.Groups[1].Value);
+                gameOver = _world.RemovePlayer(match.Groups[1].Value);
                 return;
             }
 
