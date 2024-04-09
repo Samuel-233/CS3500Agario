@@ -19,8 +19,7 @@ namespace ClientGUI
         /// <summary>
         /// Track the mouse position
         /// </summary>
-        object? sender;
-        PointerEventArgs? e;
+        public Point? relativeToContainerPosition { get; set; }
 
         public ClientBackEnd(MainPage mainPage)
         {
@@ -160,24 +159,24 @@ namespace ClientGUI
 
         }
 
-        public async Task Move(object sender, PointerEventArgs e, CancellationToken cancellationToken)
+        public async Task Move(Point? relativeToContainerPosition, CancellationToken cancellationToken)
         {
-            UpdateUserPointer(sender, e);
+            lock(this){
+                this.relativeToContainerPosition = relativeToContainerPosition;
+            }
+            
             try
             {
                 while (true)
                 {
-
                     cancellationToken.ThrowIfCancellationRequested();
 
-
-                    Point? relPos = await GetUserPointerPos();
                     Vector2 camPos = _canvas.camPos;
                     float zoom = _canvas.currentZoom;
 
                     string command = String.Format(Protocols.CMD_Move,
-                                    (int)((relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest/2)/zoom + camPos.X),
-                                    (int)((relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest/2)/zoom + camPos.Y));
+                                    (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest/2)/zoom + camPos.X),
+                                    (int)((this.relativeToContainerPosition.Value.Y - _mainPage.playSurfacePtr.HeightRequest/2)/zoom + camPos.Y));
 
                     /*                string command = String.Format(Protocols.CMD_Move,
                                                                     relPos.Value.X ,
@@ -192,7 +191,7 @@ namespace ClientGUI
 
         async public Task Split()
         {
-            Point? relPos = await GetUserPointerPos();
+            Point? relPos = relativeToContainerPosition;
             Vector2 playerPos = _world.players[_world.playerID].pos;
 
             string command = String.Format(Protocols.CMD_Split,
@@ -203,35 +202,6 @@ namespace ClientGUI
             await networking.SendAsync(command);
         }
 
-        public void UpdateUserPointer(object sender, PointerEventArgs e)
-        {
-            if(this.sender == null)this.sender = sender;
-            if (this.e == null) this.e = e;
-            lock (this.sender)
-            {
-                lock (this.e)
-                {
-                    this.sender= sender;
-                    this.e= e;
-                }
-            }
-        }
-
-
-
-        async public Task<Point?> GetUserPointerPos(){
-            return await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                lock (this.sender)
-                {
-                    lock (this.e)
-                    {
-                        return this.e.GetPosition((View)this.sender);
-                    }
-                }
-
-            });
-        }
 
         /// <summary>
         /// Check the message that send from server, and update the data.

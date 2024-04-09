@@ -77,7 +77,9 @@ namespace ClientGUI
 
         private void PointerMoved(object sender, PointerEventArgs e)
         {
-            backEnd.UpdateUserPointer(sender,e);
+            lock (backEnd) {
+                backEnd.relativeToContainerPosition = e.GetPosition((View)sender);
+            }
         }
 
         private async void PointerPressed(object sender, PointerEventArgs e)
@@ -101,7 +103,7 @@ namespace ClientGUI
             if (relativeToContainerPosition == null) return;
             Task t = new Task(async () =>
             {
-                await backEnd.Move(sender, e, continusMove.Token);
+                await backEnd.Move(relativeToContainerPosition, continusMove.Token);
             });
             t.Start();
             await t;
