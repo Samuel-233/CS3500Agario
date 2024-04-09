@@ -126,7 +126,7 @@ namespace ClientGUI
                 }
             }
             //Draw Game Over Frame
-            void DrawGameOver(ICanvas canvas)
+            void DrawGameOver(ICanvas canvas)//TODO Draw other info
             {
                 canvas.FillColor = Color.FromRgba("#00000033");
                 canvas.FillRectangle(0, 0, width, height);

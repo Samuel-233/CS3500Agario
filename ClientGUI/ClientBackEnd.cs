@@ -187,7 +187,6 @@ namespace ClientGUI
             try
             {
                 await networking.SendAsync(command);
-                _logger.LogInformation(command);
             }
             catch (Exception ex) { return; }
         }
@@ -210,7 +209,7 @@ namespace ClientGUI
         /// Check the message that send from server, and update the data.
         /// </summary>
         /// <param name="message"></param>
-        private void CheckMessage(string message)
+        private void CheckMessage(string message) //TODO Add heart beat, etc. 
         {
             Match match;
 

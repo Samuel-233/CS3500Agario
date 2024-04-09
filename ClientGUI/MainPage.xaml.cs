@@ -34,9 +34,6 @@ namespace ClientGUI
             loginStackPtr = loginStack;
             backEnd = new ClientBackEnd(this);
             continusMove = new CancellationTokenSource();
-            /*            this.PlaySurface.Drawable = new MyCanvas(boxes,
-                            MoveOnUpdateCheckBox, InvalidateAlwaysCheckBox,
-                            DrawOnMe);*/
         }
 
         /// <summary>
@@ -143,7 +140,6 @@ namespace ClientGUI
                     float x = (float)e.TotalX;
                     float y = (float)e.TotalY;
                     Point moveDist = GetRelPosOnPhone(new Point(x, y));
-                    _logger.LogInformation($"Moved {moveDist.X}, {moveDist.Y}");
 
                     await backEnd.MoveOnPhone(new System.Numerics.Vector2((float)moveDist.X, (float)moveDist.Y));
                     break;

@@ -46,7 +46,6 @@ namespace AgarioModels
             }
         }
 
-        //TODO show game over when remove self
         public void RemovePlayer(string JSON)
         {
             List<int> playerIdToRemove = new();
