@@ -1,17 +1,17 @@
 ```
-Author:     Shu Chen
-Partner:    Ping-Hsun Hsieh
+Author:     Ping-Hsun Hsieh
+Partner:    Shu Chen
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Samuel-233
 Repo:       https://github.com/uofu-cs3500-spring24/assignment-eight-agario-asianclassmate
 Date:       9/4/2024
-Project:    Logger
-Copyright:  CS 3500 and Shu Chen - This work may not be copied for use in Academic Coursework.
+Project:    AgarioModels
+Copyright:  CS 3500 and Ping-Hsun Hsieh - This work may not be copied for use in Academic Coursework.
 ```
 
 
 # Partnership Information:
-Most of the work is done by Shu.
+Most of the work is done by Ping.
 
 # Branching:
 No need to branch here
@@ -26,9 +26,9 @@ Nothing here.
 ?
 
 # Project content
-The CustomFileLogger.cs file has the implementation of a custom logger class CustomFileLogger,
-that is responsible for logging messages to a custom log file. It helps us to create log file which is specific
-to the provided name in the folder.
+This project contains all of the gaming object include the player's circle, food, and the world.
+Inside the world.cs file. Those function can helping the program to update like creating food. And the
+following update like what if the food be eaten, what if the player got eliminated based on JSON  data.
 
 # Consulted Peers:
 Sometimes we code in the same computer.

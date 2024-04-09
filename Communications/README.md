@@ -3,9 +3,9 @@ Author:     Shu Chen
 Partner:    Ping-Hsun Hsieh
 Course:     CS 3500, University of Utah, School of Computing
 GitHub ID:  Samuel-233
-Repo:       https://github.com/uofu-cs3500-spring24/assignment-seven-logging-and-networking-ps
-Date:       31/3/2024
-Project:    NetworkingLibrary
+Repo:       https://github.com/uofu-cs3500-spring24/assignment-eight-agario-asianclassmate
+Date:       9/4/2024
+Project:    Communication
 Copyright:  CS 3500 and Shu Chen - This work may not be copied for use in Academic Coursework.
 ```
 
