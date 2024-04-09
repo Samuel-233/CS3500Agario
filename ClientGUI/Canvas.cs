@@ -10,23 +10,23 @@ namespace ClientGUI
         World world;
         private readonly int width = 650;
         private readonly int height = 650;
-        //private readonly GraphicsView gv;
 
         /// <summary>
         /// Record Cam position
         /// </summary>
-        public Vector2 camPos { get; set; } = new System.Numerics.Vector2(2500f, 2500f) ;
+        public Vector2 camPos { get; set; } = new Vector2(2500f, 2500f) ;
         /// <summary>
         /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 10/r
         /// </summary>
         float targetZoom = 1;
 
+        /// <summary>
+        /// Current Cam zoom, this will gradually go to target zoom, to achieve a lerp animation of zoom 
+        /// </summary>
         public float currentZoom { get; set; } = 0;
 
-
-
         /// <summary>
-        /// Maximum zoom 
+        /// Maximum zoom so camera won't get inf small
         /// </summary>
         readonly float maxZoom;
 
@@ -35,6 +35,11 @@ namespace ClientGUI
         /// </summary>
         float halfdiagonal = ((float)Math.Sqrt(2)) / 2.0f;
 
+        /// <summary>
+        /// Constructor of the Canvas
+        /// </summary>
+        /// <param name="world">world data</param>
+        /// <param name="gv">Graphic view in MAUI</param>
         public Canvas(World world, GraphicsView gv)
         {
             width = (int)gv.WidthRequest;
@@ -42,33 +47,21 @@ namespace ClientGUI
 
             this.world = world;
             halfdiagonal *= width;
-            //this.gv = gv;
 
             maxZoom = (float)gv.WidthRequest / 5000f;
-            /*
-            //TODO Remove this debug
-            for (int i = 0; i < 100; i++)
-            {
-                this.world.foods.Add(i, new Food(i, new System.Numerics.Vector2(40 * i + 10 * i, 2500), 1, 1256.636f));
-            }
-            this.world.foods.Add(100, new Food(100, new System.Numerics.Vector2(2175, 2175), 1, 331000f));
-            this.world.foods.Add(101, new Food(101, new System.Numerics.Vector2(3150, 3150), 1, 1327000f));*/
         }
-        //TODO Make camera cannot see out side the border
+
+        /// <summary>
+        /// Will called every time draw the canvas. It will read all foods and players and draw it on the canvas
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="dirtyRect"></param>
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
+            //If player dead, draw the game over screen.
             if (world.playerDead)
             {
-                canvas.FillColor = Color.FromRgba("#00000033");
-                canvas.FillRectangle(0, 0, width, height);
-                canvas.FontColor = Colors.White;
-                canvas.FontSize = 36;
-                canvas.Font = Font.DefaultBold;
-                canvas.DrawString("Game Over!", 0, 60, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
-
-                canvas.FontSize = 18;
-                canvas.Font = Font.Default;
-                canvas.DrawString("Left Click to restart", 0, 400, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
+                DrawGameOver(canvas);
                 return;
             }
 
@@ -82,22 +75,17 @@ namespace ClientGUI
             {
                 return;
             }
-            camPos = world.players[world.playerID].pos;
-            //TODO Limit the player cannot see outside the border
-            float halfCamSizeAfterZoom = width / currentZoom / 2;
-            Vector2 topLeft = camPos - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
-            topLeft.X = Math.Max(0,topLeft.X);
-            topLeft = Vector2.Max(new Vector2(0, 0),topLeft);
-            topLeft = Vector2.Min(new Vector2(5000, 5000) - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom)*2, topLeft);
-            camPos = topLeft + new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
 
+            GetTrueCamPos();
 
+            //Clear the old frame
             canvas.FillColor = Colors.LightBlue;
             canvas.FillRectangle(0, 0, width, height);
 
             DrawFoods(canvas);
             DrawPlayers(canvas);
 
+            //Draw Player
             void DrawPlayers(ICanvas canvas)
             {
                 canvas.FontColor = Colors.Black;
@@ -119,6 +107,7 @@ namespace ClientGUI
                     }
                 }
             }
+            //Draw Food
             void DrawFoods(ICanvas canvas)
             {
                 //Draw players
@@ -127,7 +116,7 @@ namespace ClientGUI
                     foreach (var food in world.foods)
                     {
                         if (!ConvertFromWorldToScreen(food.Value.pos, food.Value.radius,
-                              out System.Numerics.Vector2 screenPos, out float radius))
+                              out Vector2 screenPos, out float radius))
                             continue;
 
                         canvas.FillColor = Color.FromInt(food.Value.ARGBColor);
@@ -137,22 +126,62 @@ namespace ClientGUI
                     }
                 }
             }
+            //Draw Game Over Frame
+            void DrawGameOver(ICanvas canvas)
+            {
+                canvas.FillColor = Color.FromRgba("#00000033");
+                canvas.FillRectangle(0, 0, width, height);
+                canvas.FontColor = Colors.White;
+                canvas.FontSize = 36;
+                canvas.Font = Font.DefaultBold;
+                canvas.DrawString("Game Over!", 0, 60, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
+
+                canvas.FontSize = 18;
+                canvas.Font = Font.Default;
+                canvas.DrawString("Left Click to restart", 0, 400, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
+            }
         }
 
 
 
-        private bool ConvertFromWorldToScreen(
-                                     in System.Numerics.Vector2 worldPos, in float radiusIn,
-                                     out System.Numerics.Vector2 screenPos, out float radiusOut)
+
+        /// <summary>
+        /// Calculate the true camera position. and limit it form seeing the boundary.
+        /// </summary>
+        private void GetTrueCamPos()
         {
-            System.Numerics.Vector2 ptMinusCam = worldPos - camPos;
+            //To make the player cannot see outside the border, we need to limit the camera position
+            camPos = world.players[world.playerID].pos;
+            float halfCamSizeAfterZoom = width / currentZoom / 2;
+            Vector2 topLeft = camPos - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
+            topLeft.X = Math.Max(0, topLeft.X);
+            //By use min and max func, limit the camera pos in a square that camera cannot see outside
+            topLeft = Vector2.Max(new Vector2(0, 0), topLeft);
+            topLeft = Vector2.Min(new Vector2(5000, 5000) - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom) * 2, topLeft);
+            camPos = topLeft + new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
+        }
+
+
+        /// <summary>
+        /// Convert a position from world cord to screen cord
+        /// </summary>
+        /// <param name="worldPos">World Position</param>
+        /// <param name="radiusIn">Object radius</param>
+        /// <param name="screenPos">Output Screen position</param>
+        /// <param name="radiusOut">output final radius in screen space, with zoom scaled</param>
+        /// <returns>return true if we decide to draw the object return false if it is too far from player</returns>
+        private bool ConvertFromWorldToScreen(
+                                     in Vector2 worldPos, in float radiusIn,
+                                     out Vector2 screenPos, out float radiusOut)
+        {
+            Vector2 ptMinusCam = worldPos - camPos;
             screenPos = new();
             radiusOut = radiusIn;
             //if the distance of cam to pt is less than the half diagonal + radius, then we do not draw it.
-            if (System.Numerics.Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / currentZoom + radiusIn, 2)) return false;
+            if (Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / currentZoom + radiusIn, 2)) return false;
 
             //Cam pos is at the center of the canvas, so add half of the screen width and height
-            screenPos = new System.Numerics.Vector2(width / currentZoom / 2, height / currentZoom / 2) + ptMinusCam;
+            screenPos = new Vector2(width / currentZoom / 2, height / currentZoom / 2) + ptMinusCam;
             screenPos *= currentZoom;
             radiusOut = radiusIn * currentZoom;
             return true;
