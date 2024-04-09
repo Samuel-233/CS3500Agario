@@ -114,12 +114,11 @@ namespace ClientGUI
         }
 
 
-        private async void OnTap(object sender, EventArgs e)
+        private async void OnTap(object sender, TappedEventArgs e)
         {
-
         }
 
-        private async void PanUpdated(object sender, EventArgs e)
+        private async void PanUpdated(object sender, PanUpdatedEventArgs e)
         {
 
         }
