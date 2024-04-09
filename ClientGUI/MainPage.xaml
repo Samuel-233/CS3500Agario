@@ -3,13 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ClientGUI.MainPage">
 
-    <ScrollView>
         <VerticalStackLayout>
 
             <HorizontalStackLayout Spacing="5">
 
                 <!--This part for user to connect to server-->
-                <VerticalStackLayout Spacing="5" WidthRequest="375" x:Name="loginStack">
+                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="loginStack">
 
                     <HorizontalStackLayout
                      HorizontalOptions="Start">
@@ -24,7 +23,7 @@
                            BackgroundColor="#3b3b3b"
                            Placeholder="Enter your name"
                            HeightRequest="40"
-                           WidthRequest="240"
+                           MaximumWidthRequest="240"
                            TextColor="White" />
                     </HorizontalStackLayout>
 
@@ -42,7 +41,7 @@
                             Placeholder="localhost"
                             TextColor="White"
                             HeightRequest="40"
-                            WidthRequest="240"
+                            MaximumWidthRequest="240"
                             IsEnabled="True" />
                     </HorizontalStackLayout>
 
@@ -62,7 +61,7 @@
                             Placeholder="11000"
                             TextColor="White"
                             HeightRequest="40"
-                            WidthRequest="240"
+                            MaximumWidthRequest="240"
                             IsEnabled="True" />
                     </HorizontalStackLayout>
 
@@ -84,15 +83,15 @@
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 1-->
-                <VerticalStackLayout Spacing="5" WidthRequest="375" HeightRequest="180" VerticalOptions="Start">
-                    <ScrollView WidthRequest="300" HeightRequest="180" VerticalOptions="Start">
+                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" HeightRequest="180" VerticalOptions="Start">
+                    <ScrollView MaximumWidthRequest="300" HeightRequest="180" VerticalOptions="Start">
                         <Label
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Text="Welcome to Agrio for CS 3500 All Systems Go!"
                             x:Name="UserLoggingLabel"
                             TextColor="White"
-                            WidthRequest="300"
+                            MaximumWidthRequest="300"
                             LineBreakMode="WordWrap"
                             FontSize="20" />
                     </ScrollView>
@@ -100,7 +99,7 @@
                 </VerticalStackLayout>
 
                 <!--This part Show the Info 2-->
-                <VerticalStackLayout Spacing="5" WidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
+                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
 
                 </VerticalStackLayout>
 
@@ -128,6 +127,6 @@
 
 
         </VerticalStackLayout>
-    </ScrollView>
+
 
 </ContentPage>

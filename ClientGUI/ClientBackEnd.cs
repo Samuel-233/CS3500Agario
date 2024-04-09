@@ -34,7 +34,7 @@ namespace ClientGUI
 
 
         /// <summary>
-        /// alled when user clicked connect button
+        /// called when user clicked connect button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -141,6 +141,8 @@ namespace ClientGUI
             ExecuteOnMainThread((s) => _mainPage.connectButtonPtr.Text = s, "Connect To Server");
             ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsEnabled =b, true);
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Disconnected From Server");
+            _world.foods.Clear();
+            _world.players.Clear();
         }
 
 
@@ -162,9 +164,9 @@ namespace ClientGUI
         public async Task Move(Point? relativeToContainerPosition, CancellationToken cancellationToken)
         {
             lock(this){
+                if (relativeToContainerPosition == null) return;
                 this.relativeToContainerPosition = relativeToContainerPosition;
             }
-            
             try
             {
                 while (true)
@@ -175,12 +177,9 @@ namespace ClientGUI
                     float zoom = _canvas.currentZoom;
 
                     string command = String.Format(Protocols.CMD_Move,
-                                    (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest/2)/zoom + camPos.X),
-                                    (int)((this.relativeToContainerPosition.Value.Y - _mainPage.playSurfacePtr.HeightRequest/2)/zoom + camPos.Y));
+                                    (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2) / zoom + camPos.X),
+                                    (int)((this.relativeToContainerPosition.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2) / zoom + camPos.Y));
 
-                    /*                string command = String.Format(Protocols.CMD_Move,
-                                                                    relPos.Value.X ,
-                                                                    relPos.Value.Y );*/
                     _logger.LogTrace(command);
                     await networking.SendAsync(command);
 
@@ -189,9 +188,27 @@ namespace ClientGUI
             catch (Exception ex) { return; }
         }
 
+
+        public async Task MoveOnPhone(Vector2 dir)
+        {
+            Vector2 playerPos = _world.players[_world.playerID].pos;
+            playerPos += dir;
+            string command = String.Format(Protocols.CMD_Move, (int)playerPos.X, (int)playerPos.Y);
+            try
+            {
+                await networking.SendAsync(command);
+                _logger.LogInformation(command);
+            }
+            catch (Exception ex) { return; }
+        }
+
+
+
+
         async public Task Split()
         {
             Point? relPos = relativeToContainerPosition;
+            if(relPos ==  null) return; 
             Vector2 playerPos = _world.players[_world.playerID].pos;
 
             string command = String.Format(Protocols.CMD_Split,
