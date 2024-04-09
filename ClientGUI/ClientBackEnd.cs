@@ -15,11 +15,12 @@ namespace ClientGUI
         private readonly ILogger _logger;
         public readonly World _world;
         private readonly MainPage _mainPage;
+        private readonly Canvas _canvas;
         /// <summary>
         /// Track the mouse position
         /// </summary>
-        object sender;
-        PointerEventArgs e;
+        object? sender;
+        PointerEventArgs? e;
 
         public ClientBackEnd(MainPage mainPage)
         {
@@ -27,7 +28,8 @@ namespace ClientGUI
             networking = new Networking(_logger, Connected, Disconnected, ReceivedMessage);
             _mainPage = mainPage;
             _world = new World(_logger);
-            mainPage.playSurfacePtr.Drawable = new Canvas(_world, mainPage.playSurfacePtr);
+            this._canvas = new Canvas(_world, mainPage.playSurfacePtr);
+            mainPage.playSurfacePtr.Drawable = _canvas;
         }
 
 
@@ -166,11 +168,12 @@ namespace ClientGUI
 
 
                     Point? relPos = await GetUserPointerPos();
-                    Vector2 camPos = _world.players[_world.playerID].pos;
+                    Vector2 camPos = _canvas.camPos;
+                    float zoom = _canvas.currentZoom;
 
                     string command = String.Format(Protocols.CMD_Move,
-                                                    (int)(relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2 + camPos.X),
-                                                    (int)(relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2 + camPos.Y));
+                                    (int)((relPos.Value.X - _mainPage.playSurfacePtr.WidthRequest/2)/zoom + camPos.X),
+                                    (int)((relPos.Value.Y - _mainPage.playSurfacePtr.HeightRequest/2)/zoom + camPos.Y));
 
                     /*                string command = String.Format(Protocols.CMD_Move,
                                                                     relPos.Value.X ,

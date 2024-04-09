@@ -21,7 +21,7 @@ namespace ClientGUI
         /// </summary>
         float targetZoom = 1;
 
-        float currentZoom = 0;
+        public float currentZoom { get; set; } = 0;
 
 
 
@@ -139,9 +139,6 @@ namespace ClientGUI
             }
         }
 
-        public Vector2 GetCamPos(){
-
-        }
 
 
         private bool ConvertFromWorldToScreen(
