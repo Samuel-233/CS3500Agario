@@ -64,6 +64,7 @@ namespace AgarioModels
                 {
                     if (playerID == id) {
                         playerDead = true;
+                        logger.LogInformation("Player Dead, Waiting for restart"); 
                     } 
                     players.Remove(id);
                 }
@@ -91,7 +92,7 @@ namespace AgarioModels
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error Occur during Initialize Food, {ex.Message}");
+                logger.LogError($"Error Occur during De serialize info, {ex.Message}");
             }
 
         }
