@@ -29,7 +29,7 @@ namespace AgarioModels
 
         public void InitializeFood(string JSON)
         {
-            List<Food>? foods = new();
+            List<Food> foods = new();
             DeserializeJSON(ref foods, JSON);
 
             lock (this.foods)

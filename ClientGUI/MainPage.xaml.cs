@@ -1,7 +1,5 @@
 ﻿
 using Microsoft.Extensions.Logging;
-using NetworkingLibrary;
-using System.Threading;
 
 namespace ClientGUI
 {
@@ -19,6 +17,8 @@ namespace ClientGUI
         public readonly GraphicsView playSurfacePtr;
 
         CancellationTokenSource continusMove;
+
+        private DateTime lastTappedTime;
 
         //TODO Figure out how to do DI for the backEnd
         public MainPage(ILogger<MainPage> logger)
@@ -77,7 +77,9 @@ namespace ClientGUI
 
         private void PointerMoved(object sender, PointerEventArgs e)
         {
-            backEnd.UpdateUserPointer(sender,e);
+            lock (backEnd) {
+                backEnd.relativeToContainerPosition = e.GetPosition((View)sender);
+            }
         }
 
         private async void PointerPressed(object sender, PointerEventArgs e)
@@ -101,7 +103,7 @@ namespace ClientGUI
             if (relativeToContainerPosition == null) return;
             Task t = new Task(async () =>
             {
-                await backEnd.Move(sender, e, continusMove.Token);
+                await backEnd.Move(relativeToContainerPosition, continusMove.Token);
             });
             t.Start();
             await t;
@@ -116,11 +118,48 @@ namespace ClientGUI
 
         private async void OnTap(object sender, TappedEventArgs e)
         {
+            lock (backEnd)
+            {
+                backEnd.relativeToContainerPosition = GetRelPosOnPhone(e.GetPosition((View)sender)); ;
+            }
+
+            if (backEnd._world.playerDead)
+            {
+                _logger.LogInformation("Restarted Game");
+                backEnd._world.playerDead = false;
+                await backEnd.SendStartGameCommand();
+                continusMove = new();
+                return;
+            }
+
+            double tappedTimeInterval = (lastTappedTime - System.DateTime.Now).TotalSeconds;
+            lastTappedTime = System.DateTime.Now;
+            if (tappedTimeInterval < 0.5) await backEnd.Split();
+
+
         }
 
         private async void PanUpdated(object sender, PanUpdatedEventArgs e)
         {
+            if (backEnd._world.playerDead) return;
+            switch (e.StatusType)
+            {
+                case GestureStatus.Running:
+                    float x = (float)e.TotalX; 
+                    float y = (float)e.TotalY;
+                    Point moveDist = GetRelPosOnPhone(new Point(x,y));
+                    _logger.LogInformation($"Moved {moveDist.X}, {moveDist.Y}");
 
+                    await backEnd.MoveOnPhone(new System.Numerics.Vector2((float)moveDist.X,(float)moveDist.Y));
+                    break;
+            }
+        }
+
+        private Point GetRelPosOnPhone(Point? value){
+            var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            double width = mainDisplayInfo.Width;
+            double height = mainDisplayInfo.Height;
+            return new Point(value.Value.X / width * playSurface.Width, value.Value.Y / height * playSurface.Height);
         }
 
     }
