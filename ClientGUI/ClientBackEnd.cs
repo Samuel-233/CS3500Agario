@@ -135,13 +135,17 @@ namespace ClientGUI
         /// <param name="channel">networking channel</param>
         private void Disconnected(Networking channel)
         {
-            _mainPage.gameInfoStackPtr.IsVisible = false;
-            _mainPage.playSurfacePtr.IsVisible = false;
-            _mainPage.loginStackPtr.IsVisible = true;
-            _mainPage.connectButtonPtr.IsEnabled = true;
-            _mainPage.connectButtonPtr.Text = "Connect To Server";
+            ExecuteOnMainThread((b) => _mainPage.gameInfoStackPtr.IsVisible = b, false);
+            ExecuteOnMainThread((b) => _mainPage.playSurfacePtr.IsVisible = b, false);
+            ExecuteOnMainThread((b) => _mainPage.loginStackPtr.IsVisible = b, true);
+            ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsVisible = b, true);
+            ExecuteOnMainThread((s) => _mainPage.connectButtonPtr.Text = s, "Connect To Server");
+            ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsEnabled =b, true);
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Disconnected From Server");
         }
+
+
+
 
         /// <summary>
         /// A delegate feed to the networking, called when received a complete message
