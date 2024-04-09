@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace ClientGUI
 {
@@ -16,7 +15,7 @@ namespace ClientGUI
         public readonly VerticalStackLayout loginStackPtr;
         public readonly GraphicsView playSurfacePtr;
 
-        CancellationTokenSource continusMove;
+        private CancellationTokenSource continusMove;
 
         private DateTime lastTappedTime;
 
@@ -38,7 +37,6 @@ namespace ClientGUI
             /*            this.PlaySurface.Drawable = new MyCanvas(boxes,
                             MoveOnUpdateCheckBox, InvalidateAlwaysCheckBox,
                             DrawOnMe);*/
-
         }
 
         /// <summary>
@@ -77,7 +75,8 @@ namespace ClientGUI
 
         private void PointerMoved(object sender, PointerEventArgs e)
         {
-            lock (backEnd) {
+            lock (backEnd)
+            {
                 backEnd.relativeToContainerPosition = e.GetPosition((View)sender);
             }
         }
@@ -95,7 +94,7 @@ namespace ClientGUI
             await backEnd.Split();
         }
 
-        async void PointerEntered(object sender, PointerEventArgs e)
+        private async void PointerEntered(object sender, PointerEventArgs e)
         {
             if (backEnd._world.playerDead) return;
             continusMove = new();
@@ -107,14 +106,12 @@ namespace ClientGUI
             });
             t.Start();
             await t;
-            
         }
 
-        void PointerExited(object sender, PointerEventArgs e)
+        private void PointerExited(object sender, PointerEventArgs e)
         {
             continusMove.Cancel();
         }
-
 
         private async void OnTap(object sender, TappedEventArgs e)
         {
@@ -135,8 +132,6 @@ namespace ClientGUI
             double tappedTimeInterval = (lastTappedTime - System.DateTime.Now).TotalSeconds;
             lastTappedTime = System.DateTime.Now;
             if (tappedTimeInterval < 0.5) await backEnd.Split();
-
-
         }
 
         private async void PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -145,23 +140,22 @@ namespace ClientGUI
             switch (e.StatusType)
             {
                 case GestureStatus.Running:
-                    float x = (float)e.TotalX; 
+                    float x = (float)e.TotalX;
                     float y = (float)e.TotalY;
-                    Point moveDist = GetRelPosOnPhone(new Point(x,y));
+                    Point moveDist = GetRelPosOnPhone(new Point(x, y));
                     _logger.LogInformation($"Moved {moveDist.X}, {moveDist.Y}");
 
-                    await backEnd.MoveOnPhone(new System.Numerics.Vector2((float)moveDist.X,(float)moveDist.Y));
+                    await backEnd.MoveOnPhone(new System.Numerics.Vector2((float)moveDist.X, (float)moveDist.Y));
                     break;
             }
         }
 
-        private Point GetRelPosOnPhone(Point? value){
+        private Point GetRelPosOnPhone(Point? value)
+        {
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             double width = mainDisplayInfo.Width;
             double height = mainDisplayInfo.Height;
             return new Point(value.Value.X / width * playSurface.Width, value.Value.Y / height * playSurface.Height);
         }
-
     }
-
 }

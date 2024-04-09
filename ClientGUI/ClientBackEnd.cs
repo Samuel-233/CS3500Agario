@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
 namespace ClientGUI
 {
     public class ClientBackEnd
@@ -16,6 +15,7 @@ namespace ClientGUI
         public readonly World _world;
         private readonly MainPage _mainPage;
         private readonly Canvas _canvas;
+
         /// <summary>
         /// Track the mouse position
         /// </summary>
@@ -30,8 +30,6 @@ namespace ClientGUI
             this._canvas = new Canvas(_world, mainPage.playSurfacePtr);
             mainPage.playSurfacePtr.Drawable = _canvas;
         }
-
-
 
         /// <summary>
         /// called when user clicked connect button
@@ -97,7 +95,6 @@ namespace ClientGUI
             return true;
         }
 
-
         /// <summary>
         /// Starting let client to handle incoming data
         /// </summary>
@@ -105,7 +102,6 @@ namespace ClientGUI
         {
             await networking.HandleIncomingDataAsync();
         }
-
 
         /// <summary>
         /// A delegate feed to the networking, called when connected to server
@@ -120,7 +116,6 @@ namespace ClientGUI
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Connected To Server");
             await SendStartGameCommand();
             _world.playerDead = false;
-
         }
 
         public async Task SendStartGameCommand()
@@ -139,14 +134,11 @@ namespace ClientGUI
             ExecuteOnMainThread((b) => _mainPage.loginStackPtr.IsVisible = b, true);
             ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsVisible = b, true);
             ExecuteOnMainThread((s) => _mainPage.connectButtonPtr.Text = s, "Connect To Server");
-            ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsEnabled =b, true);
+            ExecuteOnMainThread((b) => _mainPage.connectButtonPtr.IsEnabled = b, true);
             ExecuteOnMainThread((s) => _mainPage.userLoggingLabelPtr.Text = s, "Disconnected From Server");
             _world.foods.Clear();
             _world.players.Clear();
         }
-
-
-
 
         /// <summary>
         /// A delegate feed to the networking, called when received a complete message
@@ -155,15 +147,15 @@ namespace ClientGUI
         /// <param name="message">message</param>
         private void ReceivedMessage(Networking channel, string message)
         {
-            if(_world.playerDead) return;
+            if (_world.playerDead) return;
             CheckMessage(message);
             _mainPage.playSurfacePtr.Invalidate();
-
         }
 
         public async Task Move(Point? relativeToContainerPosition, CancellationToken cancellationToken)
         {
-            lock(this){
+            lock (this)
+            {
                 if (relativeToContainerPosition == null) return;
                 this.relativeToContainerPosition = relativeToContainerPosition;
             }
@@ -182,12 +174,10 @@ namespace ClientGUI
 
                     _logger.LogTrace(command);
                     await networking.SendAsync(command);
-
                 }
             }
             catch (Exception ex) { return; }
         }
-
 
         public async Task MoveOnPhone(Vector2 dir)
         {
@@ -202,13 +192,10 @@ namespace ClientGUI
             catch (Exception ex) { return; }
         }
 
-
-
-
-        async public Task Split()
+        public async Task Split()
         {
             Point? relPos = relativeToContainerPosition;
-            if(relPos ==  null) return; 
+            if (relPos == null) return;
             Vector2 playerPos = _world.players[_world.playerID].pos;
 
             string command = String.Format(Protocols.CMD_Split,
@@ -218,7 +205,6 @@ namespace ClientGUI
             _logger.LogTrace(command);
             await networking.SendAsync(command);
         }
-
 
         /// <summary>
         /// Check the message that send from server, and update the data.
@@ -275,12 +261,13 @@ namespace ClientGUI
                 _world.InitializeFood(match.Groups[1].Value);
                 return;
             }
-
         }
 
-        private string GeneratePattern(string protocol){
-            return protocol+@"(.+)";
+        private string GeneratePattern(string protocol)
+        {
+            return protocol + @"(.+)";
         }
+
         /// <summary>
         /// Make the func execute on Main thread
         /// </summary>

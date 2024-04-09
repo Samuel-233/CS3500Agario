@@ -1,11 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace AgarioModels
 {
@@ -17,8 +11,6 @@ namespace AgarioModels
         public string heartBeat { get; set; }
         public bool playerDead { get; set; }
         private ILogger logger;
-        
-
 
         public World(ILogger logger)
         {
@@ -45,13 +37,13 @@ namespace AgarioModels
         {
             List<int> foodIdToRemove = new();
             DeserializeJSON(ref foodIdToRemove, JSON);
-            lock(this.foods){
+            lock (this.foods)
+            {
                 foreach (int id in foodIdToRemove)
                 {
                     foods.Remove(id);
                 }
             }
-
         }
 
         //TODO show game over when remove self
@@ -59,13 +51,15 @@ namespace AgarioModels
         {
             List<int> playerIdToRemove = new();
             DeserializeJSON(ref playerIdToRemove, JSON);
-            lock(this.players){
+            lock (this.players)
+            {
                 foreach (int id in playerIdToRemove)
                 {
-                    if (playerID == id) {
+                    if (playerID == id)
+                    {
                         playerDead = true;
-                        logger.LogInformation("Player Dead, Waiting for restart"); 
-                    } 
+                        logger.LogInformation("Player Dead, Waiting for restart");
+                    }
                     players.Remove(id);
                 }
             }
@@ -85,7 +79,8 @@ namespace AgarioModels
             }
         }
 
-        private void DeserializeJSON <T>(ref T result, string JSON){
+        private void DeserializeJSON<T>(ref T result, string JSON)
+        {
             try
             {
                 result = JsonSerializer.Deserialize<T>(JSON) ?? throw new Exception("Bad JSON");
@@ -94,7 +89,6 @@ namespace AgarioModels
             {
                 logger.LogError($"Error Occur during De serialize info, {ex.Message}");
             }
-
         }
     }
 }

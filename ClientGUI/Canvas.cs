@@ -1,5 +1,4 @@
 ﻿using AgarioModels;
-using Microsoft.Maui.Graphics.Text;
 using System.Numerics;
 using Font = Microsoft.Maui.Graphics.Font;
 
@@ -7,33 +6,34 @@ namespace ClientGUI
 {
     internal class Canvas : IDrawable
     {
-        World world;
+        private World world;
         private readonly int width = 650;
         private readonly int height = 650;
 
         /// <summary>
         /// Record Cam position
         /// </summary>
-        public Vector2 camPos { get; set; } = new Vector2(2500f, 2500f) ;
+        public Vector2 camPos { get; set; } = new Vector2(2500f, 2500f);
+
         /// <summary>
         /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 10/r
         /// </summary>
-        float targetZoom = 1;
+        private float targetZoom = 1;
 
         /// <summary>
-        /// Current Cam zoom, this will gradually go to target zoom, to achieve a lerp animation of zoom 
+        /// Current Cam zoom, this will gradually go to target zoom, to achieve a lerp animation of zoom
         /// </summary>
         public float currentZoom { get; set; } = 0;
 
         /// <summary>
         /// Maximum zoom so camera won't get inf small
         /// </summary>
-        readonly float maxZoom;
+        private readonly float maxZoom;
 
         /// <summary>
-        /// The length of a canvas diagonal divided by two. 
+        /// The length of a canvas diagonal divided by two.
         /// </summary>
-        float halfdiagonal = ((float)Math.Sqrt(2)) / 2.0f;
+        private float halfdiagonal = ((float)Math.Sqrt(2)) / 2.0f;
 
         /// <summary>
         /// Constructor of the Canvas
@@ -64,7 +64,6 @@ namespace ClientGUI
                 DrawGameOver(canvas);
                 return;
             }
-
 
             try
             {
@@ -142,9 +141,6 @@ namespace ClientGUI
             }
         }
 
-
-
-
         /// <summary>
         /// Calculate the true camera position. and limit it form seeing the boundary.
         /// </summary>
@@ -160,7 +156,6 @@ namespace ClientGUI
             topLeft = Vector2.Min(new Vector2(5000, 5000) - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom) * 2, topLeft);
             camPos = topLeft + new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
         }
-
 
         /// <summary>
         /// Convert a position from world cord to screen cord

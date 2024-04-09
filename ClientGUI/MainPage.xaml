@@ -3,39 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ClientGUI.MainPage">
 
-        <VerticalStackLayout>
+    <VerticalStackLayout>
 
-            <HorizontalStackLayout Spacing="5">
+        <HorizontalStackLayout Spacing="5">
 
-                <!--This part for user to connect to server-->
-                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="loginStack">
+            <!--This part for user to connect to server-->
+            <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="loginStack">
 
-                    <HorizontalStackLayout
+                <HorizontalStackLayout
                      HorizontalOptions="Start">
-                        <Label
+                    <Label
                             Text="Name"
                             FontSize="20"
                             WidthRequest="60"
                             VerticalTextAlignment="Center"
                             TextColor="White" />
-                        <Entry 
+                    <Entry
                            x:Name="NameEntry"
                            BackgroundColor="#3b3b3b"
                            Placeholder="Enter your name"
                            HeightRequest="40"
                            MaximumWidthRequest="240"
                            TextColor="White" />
-                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-                    <HorizontalStackLayout
+                <HorizontalStackLayout
                     HorizontalOptions="Start">
-                        <Label
+                    <Label
                             Text=" Server&#10;Address"
                             TextColor="White"
                             WidthRequest="60"
                             FontSize="15" />
 
-                        <Entry
+                    <Entry
                             x:Name="IPAddressEntry"
                             BackgroundColor="#3b3b3b"
                             Placeholder="localhost"
@@ -43,11 +43,11 @@
                             HeightRequest="40"
                             MaximumWidthRequest="240"
                             IsEnabled="True" />
-                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-                    <HorizontalStackLayout
+                <HorizontalStackLayout
                     HorizontalOptions="Start">
-                        <Label
+                    <Label
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Text="Port"
@@ -55,7 +55,7 @@
                             WidthRequest="60"
                             FontSize="20" />
 
-                        <Entry
+                    <Entry
                             x:Name="PortEntry"
                             BackgroundColor="#3b3b3b"
                             Placeholder="11000"
@@ -63,11 +63,11 @@
                             HeightRequest="40"
                             MaximumWidthRequest="240"
                             IsEnabled="True" />
-                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-                    <HorizontalStackLayout
+                <HorizontalStackLayout
                      HorizontalOptions="Center">
-                        <Button
+                    <Button
                         x:Name="ConnectButton"
                         Text="Connect To Server"
                         FontAutoScalingEnabled="True"
@@ -76,16 +76,13 @@
                         HeightRequest="20"
                         IsEnabled="True"
                         HorizontalOptions="Center" />
-                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
-
-
-                </VerticalStackLayout>
-
-                <!--This part Show the Info 1-->
-                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" HeightRequest="180" VerticalOptions="Start">
-                    <ScrollView MaximumWidthRequest="300" HeightRequest="180" VerticalOptions="Start">
-                        <Label
+            <!--This part Show the Info 1-->
+            <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" HeightRequest="180" VerticalOptions="Start">
+                <ScrollView MaximumWidthRequest="300" HeightRequest="180" VerticalOptions="Start">
+                    <Label
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             Text="Welcome to Agrio for CS 3500 All Systems Go!"
@@ -94,39 +91,30 @@
                             MaximumWidthRequest="300"
                             LineBreakMode="WordWrap"
                             FontSize="20" />
-                    </ScrollView>
-                    
-                </VerticalStackLayout>
+                </ScrollView>
+            </VerticalStackLayout>
 
-                <!--This part Show the Info 2-->
-                <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
+            <!--This part Show the Info 2-->
+            <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
+            </VerticalStackLayout>
 
-                </VerticalStackLayout>
+            <!--This part Show the Info 3-->
+            <VerticalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
 
-                <!--This part Show the Info 3-->
-                <VerticalStackLayout>
-
-                </VerticalStackLayout>
-
-
-            </HorizontalStackLayout>
-
-            <GraphicsView 
+        <GraphicsView
                 x:Name="playSurface"
                 VerticalOptions="Center"
                 BackgroundColor="Blue"
                 HeightRequest="750"
                 IsVisible="false"
                 WidthRequest="750">
-                <GraphicsView.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="PointerEntered" PointerExited="PointerExited" PointerPressed="PointerPressed" PointerMoved="PointerMoved" />
-                    <TapGestureRecognizer Tapped="OnTap" />
-                    <PanGestureRecognizer PanUpdated="PanUpdated" />
-                </GraphicsView.GestureRecognizers>
-            </GraphicsView>
-
-
-        </VerticalStackLayout>
-
-
+            <GraphicsView.GestureRecognizers>
+                <PointerGestureRecognizer PointerEntered="PointerEntered" PointerExited="PointerExited" PointerPressed="PointerPressed" PointerMoved="PointerMoved" />
+                <TapGestureRecognizer Tapped="OnTap" />
+                <PanGestureRecognizer PanUpdated="PanUpdated" />
+            </GraphicsView.GestureRecognizers>
+        </GraphicsView>
+    </VerticalStackLayout>
 </ContentPage>

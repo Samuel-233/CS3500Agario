@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AgarioModels
+﻿namespace AgarioModels
 {
     /// <summary>
     ///   <list type="bullet">
@@ -51,14 +45,14 @@ namespace AgarioModels
         ///     Example: {Command Player Object}5
         ///   </para>
         /// </summary>
-        public const string CMD_Player_Object  = "{Command Player Object}";
+        public const string CMD_Player_Object = "{Command Player Object}";
 
         /// <summary>
         ///   <para>
         ///     Command sent from Server to Client.
         ///   </para>
         ///   <para>
-        ///     Sends a list of either (a) a newly created food object or (b) all the food in the system.  
+        ///     Sends a list of either (a) a newly created food object or (b) all the food in the system.
         ///   </para>
         ///   <para>
         ///     Important: (b) only happens once, and upon first connection to the server.
@@ -72,14 +66,14 @@ namespace AgarioModels
         ///     Example:   {Command Food}[{"X":344,"Y":1216,"ARGBColor":-1977629,"ID":3053,"Mass":50}]
         ///   </para>
         /// </summary>
-        public const string CMD_Food           = "{Command Food}";
+        public const string CMD_Food = "{Command Food}";
 
         /// <summary>
         ///   <para>
         ///     Command sent from Server to Client.
         ///   </para>
         ///   <para>
-        ///     Sent when players die.  
+        ///     Sent when players die.
         ///   </para>
         ///   <para>
         ///     Syntax: Command statement directly followed by an array of integers.
@@ -90,7 +84,7 @@ namespace AgarioModels
         ///     Example: {Command Dead Players}[5,10,20,30,16,121,...]
         ///   </para>
         /// </summary>
-        public const string CMD_Dead_Players   = "{Command Dead Players}";
+        public const string CMD_Dead_Players = "{Command Dead Players}";
 
         /// <summary>
         ///   <para>
@@ -108,7 +102,7 @@ namespace AgarioModels
         ///     Example: {Command Eaten Food}[2701,2546,515,1484,2221,240,1378,1124,1906,1949]
         ///   </para>
         /// </summary>
-        public const string CMD_Eaten_Food     = "{Command Eaten Food}";
+        public const string CMD_Eaten_Food = "{Command Eaten Food}";
 
         /// <summary>
         ///   <para>
@@ -130,7 +124,7 @@ namespace AgarioModels
         ///     Example: {Command Heartbeat}5
         ///   </para>
         /// </summary>
-        public const string CMD_HeartBeat      = "{Command Heartbeat}";
+        public const string CMD_HeartBeat = "{Command Heartbeat}";
 
         /// <summary>
         ///   <para>
@@ -138,13 +132,13 @@ namespace AgarioModels
         ///   </para>
         ///   <para>
         ///     At each heartbeat of the game loop, the server will send a list of player objects,
-        ///     representing the location, mass, etc. of each player in the game.  
+        ///     representing the location, mass, etc. of each player in the game.
         ///   </para>
         ///   <para>
         ///     Syntax: Command statement directly followed by a JSON-(serialized) list of player objects.
         ///   </para>
         ///   <remark>
-        ///     Your class definition must exactly match the scheme below in order to 
+        ///     Your class definition must exactly match the scheme below in order to
         ///     use automatic deserialization.
         ///   </remark>
         ///   <para>
@@ -161,16 +155,16 @@ namespace AgarioModels
         ///     Use this command to begin playing the game with a player of the given name.
         ///   </para>
         ///   <para>
-        ///     This command asks the server to create a new player and to 
+        ///     This command asks the server to create a new player and to
         ///     add that player to the game.  The Server should respond with
         ///     a CMD_Player_Object command.
         ///   </para>
         ///   <para>
         ///     Warning: Only send this after the connection has been established (e.g., in onConnect)
-        ///     and the player is ready to start playing. 
+        ///     and the player is ready to start playing.
         ///   </para>
         ///   <para>
-        ///     If the player dies, the client can resend this (don't send it if alive) to start 
+        ///     If the player dies, the client can resend this (don't send it if alive) to start
         ///     another session without having to disconnect and reconnect the network.
         ///   </para>
         ///   <para>
@@ -183,7 +177,7 @@ namespace AgarioModels
         ///     Example: {name,"Jim"}
         ///   </para>
         ///   <para>
-        ///     Example of how to produce this command: String.Format(Protocols.CMD_Start_Game, "Jim"); 
+        ///     Example of how to produce this command: String.Format(Protocols.CMD_Start_Game, "Jim");
         ///   </para>
         /// </summary>
         public const string CMD_Start_Game = @"{{name,""{0}""}}";
@@ -204,7 +198,7 @@ namespace AgarioModels
         ///     Example of usage: Regex.Match( message, Protocols.CMD_Start_Recognizer )).Success
         ///   </para>
         /// </summary>
-        public const string CMD_Start_Recognizer  = @"{name,""(.+)""}";
+        public const string CMD_Start_Recognizer = @"{name,""(.+)""}";
 
         /// <summary>
         ///   <para>
@@ -231,7 +225,7 @@ namespace AgarioModels
         ///     Example of how to use: String.Format(Protocols.CMD_Move, 100, 500);
         ///   </para>
         /// </summary>
-        public const string CMD_Move             = @"{{move,{0},{1}}}";
+        public const string CMD_Move = @"{{move,{0},{1}}}";
 
         /// <summary>
         ///   <para>
@@ -254,7 +248,7 @@ namespace AgarioModels
         ///     Example of usage: Regex.Match( CMD_Move_Recognizer, Protocols.CMD_Move_Recognizer );
         ///   </para>
         /// </summary>
-        public const string CMD_Move_Recognizer  = @"{move,(-?\d+),(-?\d+)}";
+        public const string CMD_Move_Recognizer = @"{move,(-?\d+),(-?\d+)}";
 
         /// <summary>
         ///   <para>
@@ -280,7 +274,7 @@ namespace AgarioModels
         ///     Example of usage: String.Format(Protocols.CMD_Split, 100, 500);
         ///   </para>
         /// </summary>
-        public const string CMD_Split            = @"{{split,{0},{1}}}";
+        public const string CMD_Split = @"{{split,{0},{1}}}";
 
         /// <summary>
         ///   <para>
