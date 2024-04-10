@@ -70,6 +70,11 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        /// Update the ball's target position when user move the mouse
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PointerMoved(object sender, PointerEventArgs e)
         {
             lock (backEnd)
@@ -78,6 +83,11 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        /// When pointer Pressed, call this function.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void PointerPressed(object sender, PointerEventArgs e)
         {
             if (backEnd._world.playerDead)
@@ -91,6 +101,11 @@ namespace ClientGUI
             await backEnd.Split();
         }
 
+        /// <summary>
+        /// When Pointer entered the play surface, start to move toward to pointer until pointer leave the play surface
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void PointerEntered(object sender, PointerEventArgs e)
         {
             if (backEnd._world.playerDead) return;
@@ -105,13 +120,25 @@ namespace ClientGUI
             await t;
         }
 
+        /// <summary>
+        /// When pointer Exit the play surface, stop the movement
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PointerExited(object sender, PointerEventArgs e)
         {
             continusMove.Cancel();
         }
 
+        /// <summary>
+        /// When user tap the screen, will call this func
+        /// NOTICE: this func will be also called by mouse input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void OnTap(object sender, TappedEventArgs e)
         {
+            //When player dead, click to restart
             if (backEnd._world.playerDead)
             {
                 _logger.LogInformation("Restarted Game");
@@ -124,9 +151,16 @@ namespace ClientGUI
             double tappedTimeInterval = Math.Abs((lastTappedTime - System.DateTime.Now).TotalSeconds);
             lastTappedTime = System.DateTime.Now;
             _logger.LogInformation($"Interval is {tappedTimeInterval}");
+            //If user clicked twice, split the ball
             if (tappedTimeInterval < 0.5) await backEnd.Split();
         }
 
+        /// <summary>
+        /// When user Drag the surface, call this func.
+        /// NOTICE: this func will be also called by mouse input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void PanUpdated(object sender, PanUpdatedEventArgs e)
         {
             if (backEnd._world.playerDead) return;
@@ -142,8 +176,14 @@ namespace ClientGUI
             }
         }
 
+        /// <summary>
+        /// Convert the space from the phone in to playSurface space.
+        /// </summary>
+        /// <param name="value">The position want to convert</param>
+        /// <returns>the corresponding pos in play surface.</returns>
         private Point GetRelPosOnPhone(Point? value)
         {
+            if (value == null) return new Point(0,0);
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             double width = mainDisplayInfo.Width;
             double height = mainDisplayInfo.Height;
