@@ -6,8 +6,26 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
+
 namespace ClientGUI
 {
+    /// <summary>
+    /// Author:    Shu Chen
+    /// Partner:   Ping-Hsun Hsieh
+    /// Date:      10/4/2024
+    /// Course:    CS 3500, University of Utah, School of Computing
+    /// Copyright: CS 3500 and Shu Chen - This work may not
+    ///            be copied for use in Academic Coursework.
+    ///
+    /// I, Shu Chen, certify that I wrote this code from scratch and
+    /// did not copy it in part or whole from another source.  All
+    /// references used in the completion of the assignments are cited
+    /// in my README file.
+    ///
+    /// File Contents
+    ///This is the back end of the mainpage, it can connect and receive message form the server,
+    ///then do the action to the info it received. Finally draw the info on to the canvas
+    /// </summary>
     public class ClientBackEnd
     {
         private INetworking networking;
@@ -62,6 +80,7 @@ namespace ClientGUI
             _mainPage.iPAddressEntryPtr.IsReadOnly = true;
             _mainPage.portEntryPtr.IsReadOnly = true;
 
+            //this is the logging that will display on the client
             StringBuilder logging = new StringBuilder();
 
             if (string.IsNullOrWhiteSpace(_mainPage.nameEntryPtr.Text))
@@ -85,6 +104,7 @@ namespace ClientGUI
             }
 
             _mainPage.userLoggingLabelPtr.Text = logging.ToString();
+            _logger.LogInformation(_mainPage.userLoggingLabelPtr.Text);
 
             try
             {
@@ -122,6 +142,10 @@ namespace ClientGUI
             _world.playerDead = false;
         }
 
+        /// <summary>
+        /// Send a message to the server tell that client want to start the game
+        /// </summary>
+        /// <returns></returns>
         public async Task SendStartGameCommand()
         {
             await networking.SendAsync(string.Format(Protocols.CMD_Start_Game, _mainPage.nameEntryPtr.Text));
