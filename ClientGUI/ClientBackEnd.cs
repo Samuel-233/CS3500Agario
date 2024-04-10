@@ -166,7 +166,7 @@ namespace ClientGUI
                     cancellationToken.ThrowIfCancellationRequested();
 
                     Vector2 camPos = _canvas.camPos;
-                    float zoom = _canvas.currentZoom;
+                    float zoom = _canvas.currentZoomIn;
 
                     string command = String.Format(Protocols.CMD_Move,
                                     (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2) / zoom + camPos.X),

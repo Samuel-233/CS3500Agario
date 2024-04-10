@@ -80,6 +80,7 @@ namespace ClientGUI
 
         private async void PointerPressed(object sender, PointerEventArgs e)
         {
+            _logger.LogInformation("Pressed");
             if (backEnd._world.playerDead)
             {
                 _logger.LogInformation("Restarted Game");
@@ -112,6 +113,7 @@ namespace ClientGUI
 
         private async void OnTap(object sender, TappedEventArgs e)
         {
+            _logger.LogInformation("Tapped");
             lock (backEnd)
             {
                 backEnd.relativeToContainerPosition = GetRelPosOnPhone(e.GetPosition((View)sender)); ;

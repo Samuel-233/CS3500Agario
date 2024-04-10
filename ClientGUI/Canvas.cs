@@ -18,17 +18,17 @@ namespace ClientGUI
         /// <summary>
         /// Cam zoom, when self is bigger(radius bigger), the zoom is smaller get from 10/r
         /// </summary>
-        private float targetZoom = 1;
+        private float targetZoomIn = 1;
 
         /// <summary>
         /// Current Cam zoom, this will gradually go to target zoom, to achieve a lerp animation of zoom
         /// </summary>
-        public float currentZoom { get; set; } = 0;
+        public float currentZoomIn { get; set; } = 0;
 
         /// <summary>
         /// Maximum zoom so camera won't get inf small
         /// </summary>
-        private readonly float maxZoom;
+        private readonly float maxZoomIn;
 
         /// <summary>
         /// The length of a canvas diagonal divided by two.
@@ -48,7 +48,7 @@ namespace ClientGUI
             this.world = world;
             halfdiagonal *= width;
 
-            maxZoom = (float)gv.WidthRequest / 5000f;
+            maxZoomIn = (float)gv.WidthRequest / 5000f;
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace ClientGUI
 
             try
             {
-                targetZoom = Math.Max(10f / world.players[world.playerID].radius, maxZoom);
-                currentZoom += 0.1f * (targetZoom - currentZoom);
+                targetZoomIn = Math.Max(10f / world.players[world.playerID].radius, maxZoomIn);
+                currentZoomIn += 0.1f * (targetZoomIn - currentZoomIn);
             }
             catch (Exception e)
             {
@@ -83,6 +83,22 @@ namespace ClientGUI
 
             DrawFoods(canvas);
             DrawPlayers(canvas);
+            DrawMiniMap(canvas);
+
+            void DrawMiniMap(ICanvas canvas){
+                if (currentZoomIn < maxZoomIn + 0.01) return;
+                canvas.StrokeSize = 2;
+                canvas.DrawRectangle(0, 0, width/10, height/10);
+                canvas.FillColor = Color.FromRgba("#00000033");
+                canvas.FillRectangle(0, 0, width / 10, height / 10);
+                float camWidthOnMap = width / currentZoomIn / 5000 * width / 10;
+
+                //CamPos On the Map, but it center is on the top left
+                Vector2 camPosOnMap = camPos / 5000 * width / 10 - new Vector2(camWidthOnMap/2,camWidthOnMap/2);
+                canvas.DrawRectangle(camPosOnMap.X, camPosOnMap.Y, camWidthOnMap, camWidthOnMap);
+                canvas.FillColor = Color.FromRgba("#ffff3266");
+                canvas.FillRectangle(camPosOnMap.X, camPosOnMap.Y, camWidthOnMap, camWidthOnMap);
+            }
 
             //Draw Player
             void DrawPlayers(ICanvas canvas)
@@ -148,7 +164,7 @@ namespace ClientGUI
         {
             //To make the player cannot see outside the border, we need to limit the camera position
             camPos = world.players[world.playerID].pos;
-            float halfCamSizeAfterZoom = width / currentZoom / 2;
+            float halfCamSizeAfterZoom = width / currentZoomIn / 2;
             Vector2 topLeft = camPos - new Vector2(halfCamSizeAfterZoom, halfCamSizeAfterZoom);
             topLeft.X = Math.Max(0, topLeft.X);
             //By use min and max func, limit the camera pos in a square that camera cannot see outside
@@ -173,12 +189,12 @@ namespace ClientGUI
             screenPos = new();
             radiusOut = radiusIn;
             //if the distance of cam to pt is less than the half diagonal + radius, then we do not draw it.
-            if (Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / currentZoom + radiusIn, 2)) return false;
+            if (Vector2.Dot(ptMinusCam, ptMinusCam) > Math.Pow(halfdiagonal / currentZoomIn + radiusIn, 2)) return false;
 
             //Cam pos is at the center of the canvas, so add half of the screen width and height
-            screenPos = new Vector2(width / currentZoom / 2, height / currentZoom / 2) + ptMinusCam;
-            screenPos *= currentZoom;
-            radiusOut = radiusIn * currentZoom;
+            screenPos = new Vector2(width / currentZoomIn / 2, height / currentZoomIn / 2) + ptMinusCam;
+            screenPos *= currentZoomIn;
+            radiusOut = radiusIn * currentZoomIn;
             return true;
         }
     }
