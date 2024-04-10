@@ -22,8 +22,6 @@ Testing by execution.
 # Comments to Evaluators:
 Nothing here.
 
-# Assignment Specific Topics
-?
 
 # Project content
 The CustomFileLogger.cs file has the implementation of a custom logger class CustomFileLogger,

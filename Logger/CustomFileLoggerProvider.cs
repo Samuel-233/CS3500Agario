@@ -20,6 +20,7 @@ namespace LoggerLibrary
 {
     public class CustomFileLoggerProvider : ILoggerProvider
     {
+        //TODO Add header
         public ILogger CreateLogger(string categoryName)
         {
             return new CustomFileLogger(categoryName);

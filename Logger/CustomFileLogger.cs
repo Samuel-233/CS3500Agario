@@ -25,6 +25,7 @@ namespace LoggerLibrary
     {
         private string _FileName;
 
+        //TODO Add header
         public CustomFileLogger(string categoryName)
         {
             int procress = Process.GetCurrentProcess().Id;

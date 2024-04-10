@@ -96,10 +96,45 @@
 
             <!--This part Show the Info 2-->
             <VerticalStackLayout Spacing="5" MaximumWidthRequest="375" x:Name="gameInfoStack" IsVisible="false">
-            </VerticalStackLayout>
+                <HorizontalStackLayout>
+                    <Label
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            Text="Heart Beat:"
+                            TextColor="White"
+                            MaximumWidthRequest="150"
+                            LineBreakMode="WordWrap"
+                            FontSize="20" />
+                    <Label
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            Text="0"
+                            x:Name="HeartBeatLabel"
+                            TextColor="White"
+                            MaximumWidthRequest="150"
+                            LineBreakMode="WordWrap"
+                            FontSize="20" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            Text="Radius:"
+                            TextColor="White"
+                            MaximumWidthRequest="150"
+                            LineBreakMode="WordWrap"
+                            FontSize="20" />
+                    <Label
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center"
+                            Text="0"
+                            x:Name="RadiusLabel"
+                            TextColor="White"
+                            MaximumWidthRequest="150"
+                            LineBreakMode="WordWrap"
+                            FontSize="20" />
+                </HorizontalStackLayout>
 
-            <!--This part Show the Info 3-->
-            <VerticalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
 

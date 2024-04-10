@@ -3,6 +3,7 @@ using System.Text.Json;
 
 namespace AgarioModels
 {
+    //TODO Add Class header
     public class World
     {
         public Dictionary<int, Player> players { get; set; }
@@ -18,7 +19,7 @@ namespace AgarioModels
             players = new();
             foods = new();
         }
-
+        //TODO Add all func header
         public void InitializeFood(string JSON)
         {
             List<Food> foods = new();

@@ -11,15 +11,18 @@ namespace ClientGUI
         public readonly Entry portEntryPtr;
         public readonly Button connectButtonPtr;
         public readonly Label userLoggingLabelPtr;
+        public readonly Label heartBeatLabelPtr;
+        public readonly Label radiusLabelPtr;
         public readonly VerticalStackLayout gameInfoStackPtr;
         public readonly VerticalStackLayout loginStackPtr;
         public readonly GraphicsView playSurfacePtr;
+        
 
         private CancellationTokenSource continusMove;
 
         private DateTime lastTappedTime;
 
-        //TODO Figure out how to do DI for the backEnd
+       
         public MainPage(ILogger<MainPage> logger)
         {
             InitializeComponent();
@@ -32,6 +35,8 @@ namespace ClientGUI
             gameInfoStackPtr = gameInfoStack;
             playSurfacePtr = playSurface;
             loginStackPtr = loginStack;
+            heartBeatLabelPtr = HeartBeatLabel;
+            radiusLabelPtr = RadiusLabel;
             backEnd = new ClientBackEnd(this);
             continusMove = new CancellationTokenSource();
         }

@@ -1,5 +1,6 @@
 ﻿namespace AgarioModels
 {
+    //TODO Add Class header
     public class GameObject
     {
         public int ID { get; set; }
@@ -11,15 +12,5 @@
         { get { return _mass; } set { radius = (float)Math.Sqrt(value / 3.14159f); _mass = value; } }
         private float _mass { get; set; }
         public float radius { get; set; }
-
-        /*        public GameObject(int ID, System.Numerics.Vector2 pos, int ARGBColor, float Mass)
-                {
-                    this.ID = ID;
-                    this.pos = pos;
-                    this.ARGBColor = ARGBColor;
-                    this.Mass = Mass;
-                }
-
-                public GameObject( int X, int Y, int ARGBColor, int ID, float Mass) : this(ID, new System.Numerics.Vector2(X, Y), ARGBColor, Mass) { }*/
     }
 }

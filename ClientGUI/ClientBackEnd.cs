@@ -209,9 +209,13 @@ namespace ClientGUI
         /// Check the message that send from server, and update the data.
         /// </summary>
         /// <param name="message"></param>
-        private void CheckMessage(string message) //TODO Add heart beat, etc. 
+        private void CheckMessage(string message
         {
             Match match;
+            if(_world.players.ContainsKey(_world.playerID)){
+                ExecuteOnMainThread((s) => _mainPage.radiusLabelPtr.Text = s, _world.players[_world.playerID].radius.ToString());
+            }
+            
 
             //Eaten Food
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_Eaten_Food));
@@ -242,6 +246,7 @@ namespace ClientGUI
             if (match.Success)
             {
                 _world.heartBeat = match.Groups[1].Value;
+                ExecuteOnMainThread((s) => _mainPage.heartBeatLabelPtr.Text = s, _world.heartBeat);
                 return;
             }
 
