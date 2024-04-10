@@ -80,7 +80,6 @@ namespace ClientGUI
 
         private async void PointerPressed(object sender, PointerEventArgs e)
         {
-            _logger.LogInformation("Pressed");
             if (backEnd._world.playerDead)
             {
                 _logger.LogInformation("Restarted Game");
@@ -113,12 +112,6 @@ namespace ClientGUI
 
         private async void OnTap(object sender, TappedEventArgs e)
         {
-            _logger.LogInformation("Tapped");
-            lock (backEnd)
-            {
-                backEnd.relativeToContainerPosition = GetRelPosOnPhone(e.GetPosition((View)sender)); ;
-            }
-
             if (backEnd._world.playerDead)
             {
                 _logger.LogInformation("Restarted Game");
@@ -128,8 +121,9 @@ namespace ClientGUI
                 return;
             }
 
-            double tappedTimeInterval = (lastTappedTime - System.DateTime.Now).TotalSeconds;
+            double tappedTimeInterval = Math.Abs((lastTappedTime - System.DateTime.Now).TotalSeconds);
             lastTappedTime = System.DateTime.Now;
+            _logger.LogInformation($"Interval is {tappedTimeInterval}");
             if (tappedTimeInterval < 0.5) await backEnd.Split();
         }
 
