@@ -21,6 +21,10 @@ namespace ClientGUI
         /// </summary>
         public Point? relativeToContainerPosition { get; set; }
 
+        /// <summary>
+        /// The constructor of the back end 
+        /// </summary>
+        /// <param name="mainPage">reference to the main page</param>
         public ClientBackEnd(MainPage mainPage)
         {
             _logger = mainPage._logger;
@@ -152,6 +156,12 @@ namespace ClientGUI
             _mainPage.playSurfacePtr.Invalidate();
         }
 
+        /// <summary>
+        /// When user have a mouse, we should use this func to continuously send the move command
+        /// </summary>
+        /// <param name="relativeToContainerPosition">the mouse position in the canvas space</param>
+        /// <param name="cancellationToken">token that can stop the execution</param>
+        /// <returns></returns>
         public async Task Move(Point? relativeToContainerPosition, CancellationToken cancellationToken)
         {
             lock (this)
@@ -159,11 +169,9 @@ namespace ClientGUI
                 if (relativeToContainerPosition == null) return;
                 this.relativeToContainerPosition = relativeToContainerPosition;
             }
-            try
-            {
-                while (true)
+
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
 
                     Vector2 camPos = _canvas.camPos;
                     float zoom = _canvas.currentZoomIn;
@@ -175,10 +183,15 @@ namespace ClientGUI
                     _logger.LogTrace(command);
                     await networking.SendAsync(command);
                 }
-            }
-            catch (Exception ex) { return; }
+
         }
 
+        /// <summary>
+        /// When user is dragging on the screen, should call this func, because we can easily know which position user is dragging, 
+        /// but hard to get exact position. We can use the direction of dragging to find where player want to go.
+        /// </summary>
+        /// <param name="dir">a vector that user is dragging</param>
+        /// <returns></returns>
         public async Task MoveOnPhone(Vector2 dir)
         {
             Vector2 playerPos = _world.players[_world.playerID].pos;
@@ -191,6 +204,10 @@ namespace ClientGUI
             catch (Exception ex) { return; }
         }
 
+        /// <summary>
+        /// Split the player in to half (send the command to server)
+        /// </summary>
+        /// <returns>A task to track the process</returns>
         public async Task Split()
         {
             Point? relPos = relativeToContainerPosition;
@@ -209,7 +226,7 @@ namespace ClientGUI
         /// Check the message that send from server, and update the data.
         /// </summary>
         /// <param name="message"></param>
-        private void CheckMessage(string message
+        private void CheckMessage(string message)
         {
             Match match;
             if(_world.players.ContainsKey(_world.playerID)){
@@ -245,8 +262,7 @@ namespace ClientGUI
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_HeartBeat));
             if (match.Success)
             {
-                _world.heartBeat = match.Groups[1].Value;
-                ExecuteOnMainThread((s) => _mainPage.heartBeatLabelPtr.Text = s, _world.heartBeat);
+                ExecuteOnMainThread((s) => _mainPage.heartBeatLabelPtr.Text = s, match.Groups[1].Value);
                 return;
             }
 
@@ -266,7 +282,11 @@ namespace ClientGUI
                 return;
             }
         }
-
+        /// <summary>
+        /// Generate the pattern for Regex.Math func to use
+        /// </summary>
+        /// <param name="protocol">protocol we want to check</param>
+        /// <returns>a string feed in to Regex.Match func</returns>
         private string GeneratePattern(string protocol)
         {
             return protocol + @"(.+)";

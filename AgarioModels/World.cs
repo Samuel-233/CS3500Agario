@@ -8,11 +8,17 @@ namespace AgarioModels
     {
         public Dictionary<int, Player> players { get; set; }
         public Dictionary<int, Food> foods { get; set; }
+        /// <summary>
+        /// The ID of the player for this client
+        /// </summary>
         public int playerID { get; set; }
-        public string heartBeat { get; set; }
         public bool playerDead { get; set; }
         private ILogger logger;
 
+        /// <summary>
+        /// Constructor of the world class
+        /// </summary>
+        /// <param name="logger">logger</param>
         public World(ILogger logger)
         {
             this.logger = logger;
