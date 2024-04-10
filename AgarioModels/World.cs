@@ -20,6 +20,7 @@ namespace AgarioModels
             foods = new();
         }
         //TODO Add all func header
+
         public void InitializeFood(string JSON)
         {
             List<Food> foods = new();
