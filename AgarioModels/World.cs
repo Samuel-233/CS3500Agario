@@ -13,6 +13,7 @@ namespace AgarioModels
         /// </summary>
         public int playerID { get; set; }
         public bool playerDead { get; set; }
+        public float playerRadius;
         private ILogger logger;
 
         /// <summary>
@@ -81,6 +82,8 @@ namespace AgarioModels
             {
                 foreach (Player player in players)
                 {
+                    //Update the radius
+                    if(player.ID == playerID && player.radius > playerRadius) playerRadius = player.radius;
                     this.players[player.ID] = player;
                 }
             }

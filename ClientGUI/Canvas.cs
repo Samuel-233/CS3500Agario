@@ -142,7 +142,7 @@ namespace ClientGUI
                 }
             }
             //Draw Game Over Frame
-            void DrawGameOver(ICanvas canvas)//TODO Draw other info
+            void DrawGameOver(ICanvas canvas)
             {
                 canvas.FillColor = Color.FromRgba("#00000033");
                 canvas.FillRectangle(0, 0, width, height);
@@ -150,6 +150,10 @@ namespace ClientGUI
                 canvas.FontSize = 36;
                 canvas.Font = Font.DefaultBold;
                 canvas.DrawString("Game Over!", 0, 60, width, height, HorizontalAlignment.Center, VerticalAlignment.Top);
+
+                canvas.FontSize = 24;
+                canvas.Font = Font.DefaultBold;
+                canvas.DrawString($"Largest Radius: {world.playerRadius.ToString("0.00")}", 120, 160, width, height, HorizontalAlignment.Left, VerticalAlignment.Top);
 
                 canvas.FontSize = 18;
                 canvas.Font = Font.Default;

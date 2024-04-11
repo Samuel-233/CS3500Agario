@@ -254,7 +254,7 @@ namespace ClientGUI
         {
             Match match;
             if(_world.players.ContainsKey(_world.playerID)){
-                ExecuteOnMainThread((s) => _mainPage.radiusLabelPtr.Text = s, _world.players[_world.playerID].radius.ToString());
+                ExecuteOnMainThread((s) => _mainPage.radiusLabelPtr.Text = s, _world.players[_world.playerID].radius.ToString("0.00"));
             }
             
 
