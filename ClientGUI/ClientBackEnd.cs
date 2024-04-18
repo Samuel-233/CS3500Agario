@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
 namespace ClientGUI
 {
     /// <summary>
@@ -40,7 +39,7 @@ namespace ClientGUI
         public Point? relativeToContainerPosition { get; set; }
 
         /// <summary>
-        /// The constructor of the back end 
+        /// The constructor of the back end
         /// </summary>
         /// <param name="mainPage">reference to the main page</param>
         public ClientBackEnd(MainPage mainPage)
@@ -194,24 +193,22 @@ namespace ClientGUI
                 this.relativeToContainerPosition = relativeToContainerPosition;
             }
 
-                while (!cancellationToken.IsCancellationRequested)
-                {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                Vector2 camPos = _canvas.camPos;
+                float zoom = _canvas.currentZoomIn;
 
-                    Vector2 camPos = _canvas.camPos;
-                    float zoom = _canvas.currentZoomIn;
+                string command = String.Format(Protocols.CMD_Move,
+                                (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2) / zoom + camPos.X),
+                                (int)((this.relativeToContainerPosition.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2) / zoom + camPos.Y));
 
-                    string command = String.Format(Protocols.CMD_Move,
-                                    (int)((this.relativeToContainerPosition.Value.X - _mainPage.playSurfacePtr.WidthRequest / 2) / zoom + camPos.X),
-                                    (int)((this.relativeToContainerPosition.Value.Y - _mainPage.playSurfacePtr.HeightRequest / 2) / zoom + camPos.Y));
-
-                    _logger.LogTrace(command);
-                    await networking.SendAsync(command);
-                }
-
+                _logger.LogTrace(command);
+                await networking.SendAsync(command);
+            }
         }
 
         /// <summary>
-        /// When user is dragging on the screen, should call this func, because we can easily know which position user is dragging, 
+        /// When user is dragging on the screen, should call this func, because we can easily know which position user is dragging,
         /// but hard to get exact position. We can use the direction of dragging to find where player want to go.
         /// </summary>
         /// <param name="dir">a vector that user is dragging</param>
@@ -253,10 +250,10 @@ namespace ClientGUI
         private void CheckMessage(string message)
         {
             Match match;
-            if(_world.players.ContainsKey(_world.playerID)){
+            if (_world.players.ContainsKey(_world.playerID))
+            {
                 ExecuteOnMainThread((s) => _mainPage.radiusLabelPtr.Text = s, _world.players[_world.playerID].radius.ToString("0.00"));
             }
-            
 
             //Eaten Food
             match = Regex.Match(message, GeneratePattern(Protocols.CMD_Eaten_Food));
@@ -306,6 +303,7 @@ namespace ClientGUI
                 return;
             }
         }
+
         /// <summary>
         /// Generate the pattern for Regex.Math func to use
         /// </summary>

@@ -134,7 +134,6 @@
                             LineBreakMode="WordWrap"
                             FontSize="20" />
                 </HorizontalStackLayout>
-
             </VerticalStackLayout>
         </HorizontalStackLayout>
 

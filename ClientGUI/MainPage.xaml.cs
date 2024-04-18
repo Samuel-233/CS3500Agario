@@ -16,13 +16,11 @@ namespace ClientGUI
         public readonly VerticalStackLayout gameInfoStackPtr;
         public readonly VerticalStackLayout loginStackPtr;
         public readonly GraphicsView playSurfacePtr;
-        
 
         private CancellationTokenSource continusMove;
 
         private DateTime lastTappedTime;
 
-       
         public MainPage(ILogger<MainPage> logger)
         {
             InitializeComponent();
@@ -188,7 +186,7 @@ namespace ClientGUI
         /// <returns>the corresponding pos in play surface.</returns>
         private Point GetRelPosOnPhone(Point? value)
         {
-            if (value == null) return new Point(0,0);
+            if (value == null) return new Point(0, 0);
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             double width = mainDisplayInfo.Width;
             double height = mainDisplayInfo.Height;

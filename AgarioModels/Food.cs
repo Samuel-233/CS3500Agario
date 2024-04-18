@@ -18,6 +18,5 @@
     /// </summary>
     public class Food : GameObject
     {
-
     }
 }

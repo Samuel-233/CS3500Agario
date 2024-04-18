@@ -85,16 +85,17 @@ namespace ClientGUI
             DrawPlayers(canvas);
             DrawMiniMap(canvas);
 
-            void DrawMiniMap(ICanvas canvas){
+            void DrawMiniMap(ICanvas canvas)
+            {
                 if (currentZoomIn < maxZoomIn + 0.01) return;
                 canvas.StrokeSize = 2;
-                canvas.DrawRectangle(0, 0, width/10, height/10);
+                canvas.DrawRectangle(0, 0, width / 10, height / 10);
                 canvas.FillColor = Color.FromRgba("#00000033");
                 canvas.FillRectangle(0, 0, width / 10, height / 10);
                 float camWidthOnMap = width / currentZoomIn / 5000 * width / 10;
 
                 //CamPos On the Map, but it center is on the top left
-                Vector2 camPosOnMap = camPos / 5000 * width / 10 - new Vector2(camWidthOnMap/2,camWidthOnMap/2);
+                Vector2 camPosOnMap = camPos / 5000 * width / 10 - new Vector2(camWidthOnMap / 2, camWidthOnMap / 2);
                 canvas.DrawRectangle(camPosOnMap.X, camPosOnMap.Y, camWidthOnMap, camWidthOnMap);
                 canvas.FillColor = Color.FromRgba("#ffff3266");
                 canvas.FillRectangle(camPosOnMap.X, camPosOnMap.Y, camWidthOnMap, camWidthOnMap);
