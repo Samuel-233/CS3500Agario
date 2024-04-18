@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientGUI", "ClientGUI\ClientGUI.csproj", "{FDDD64DC-DAEC-4727-9A80-5678525C2658}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientGUI", "ClientGUI\ClientGUI.csproj", "{FDDD64DC-DAEC-4727-9A80-5678525C2658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgarioModels", "AgarioModels\AgarioModels.csproj", "{D489B703-E6DF-4B15-80C3-6A4AE1156D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgarioModels", "AgarioModels\AgarioModels.csproj", "{D489B703-E6DF-4B15-80C3-6A4AE1156D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications", "Communications\Communications.csproj", "{402C6A69-8443-4040-8F73-A77B0D3762B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communications", "Communications\Communications.csproj", "{402C6A69-8443-4040-8F73-A77B0D3762B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{C3746862-056D-4436-B94C-79A59217F219}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Logger\Logger.csproj", "{C3746862-056D-4436-B94C-79A59217F219}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{C41582F6-AFDB-4D0B-A086-EF1AC03BECF3}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
